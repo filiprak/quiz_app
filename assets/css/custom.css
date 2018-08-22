@@ -1,0 +1,13 @@
+.menu .logo {
+  width: 60px;
+  margin-right: 10px;
+}
+.main.menu {
+  width: 200px !important;
+}
+.panel-content {
+  margin-left: 200px !important;
+}
+.padding-30 {
+  padding: 30px;
+}
