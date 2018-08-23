@@ -20,7 +20,10 @@ class AdminPanel extends CI_Controller {
 	 */
 	public function index()
 	{
-		$this->load->view('admin_panel/index');
+        $data = array(
+            'page_title' => 'Admin Panel'
+        );
+		$this->load->view('admin_panel/index', $data);
 	}
 
     public function users()

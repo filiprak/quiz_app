@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Czas generowania: 22 Sie 2018, 20:46
+-- Czas generowania: 23 Sie 2018, 20:19
 -- Wersja serwera: 5.7.22-0ubuntu0.16.04.1
 -- Wersja PHP: 5.6.37-1+ubuntu16.04.1+deb.sury.org+1
 
@@ -40,6 +40,51 @@ CREATE TABLE `qa_answers` (
 -- --------------------------------------------------------
 
 --
+-- Struktura tabeli dla tabeli `qa_groups`
+--
+
+CREATE TABLE `qa_groups` (
+  `id` mediumint(8) UNSIGNED NOT NULL,
+  `name` varchar(20) NOT NULL,
+  `description` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Zrzut danych tabeli `qa_groups`
+--
+
+INSERT INTO `qa_groups` (`id`, `name`, `description`) VALUES
+(1, 'admin', 'Administrator'),
+(2, 'members', 'General User');
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `qa_login_attempts`
+--
+
+CREATE TABLE `qa_login_attempts` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `login` varchar(100) NOT NULL,
+  `time` int(11) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Zrzut danych tabeli `qa_login_attempts`
+--
+
+INSERT INTO `qa_login_attempts` (`id`, `ip_address`, `login`, `time`) VALUES
+(1, '::1', 'admin', 1535047024),
+(2, '::1', 'admin', 1535047030),
+(3, '::1', 'asd', 1535047036),
+(4, '::1', 'sadasdasdas', 1535047046),
+(5, '::1', 'admin', 1535047110),
+(6, '::1', 'asdas', 1535047114);
+
+-- --------------------------------------------------------
+
+--
 -- Struktura tabeli dla tabeli `qa_questions`
 --
 
@@ -70,7 +115,10 @@ CREATE TABLE `qa_rating` (
 
 CREATE TABLE `qa_scores` (
   `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `name` varchar(256) COLLATE utf8_unicode_ci NOT NULL,
+  `dob` date NOT NULL,
+  `gender` varchar(24) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Time and Date',
   `question1_id` int(11) NOT NULL COMMENT 'ID of the question shown',
   `question1_answer_id` int(11) NOT NULL COMMENT 'ID of answer that was chosen',
@@ -133,21 +181,51 @@ CREATE TABLE `qa_tags` (
 --
 
 CREATE TABLE `qa_users` (
-  `id` int(11) NOT NULL,
-  `name` varchar(256) COLLATE utf8_unicode_ci NOT NULL,
-  `dob` date NOT NULL,
-  `gender` varchar(24) COLLATE utf8_unicode_ci NOT NULL,
-  `email` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
-  `password_hash` varchar(256) COLLATE utf8_unicode_ci NOT NULL,
-  `role` varchar(24) COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `id` int(11) UNSIGNED NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `username` varchar(100) DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `salt` varchar(255) DEFAULT NULL,
+  `email` varchar(254) NOT NULL,
+  `activation_code` varchar(40) DEFAULT NULL,
+  `forgotten_password_code` varchar(40) DEFAULT NULL,
+  `forgotten_password_time` int(11) UNSIGNED DEFAULT NULL,
+  `remember_code` varchar(40) DEFAULT NULL,
+  `created_on` int(11) UNSIGNED NOT NULL,
+  `last_login` int(11) UNSIGNED DEFAULT NULL,
+  `active` tinyint(1) UNSIGNED DEFAULT NULL,
+  `first_name` varchar(50) DEFAULT NULL,
+  `last_name` varchar(50) DEFAULT NULL,
+  `company` varchar(100) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Zrzut danych tabeli `qa_users`
 --
 
-INSERT INTO `qa_users` (`id`, `name`, `dob`, `gender`, `email`, `password_hash`, `role`) VALUES
-(1, 'admin', '1999-08-24', 'male', 'admin@qa.com', '21232f297a57a5a743894a0e4a801fc3', 'admin');
+INSERT INTO `qa_users` (`id`, `ip_address`, `username`, `password`, `salt`, `email`, `activation_code`, `forgotten_password_code`, `forgotten_password_time`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`) VALUES
+(1, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', 'admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1535047360, 1, 'Admin', 'istrator', 'ADMIN', '0');
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `qa_users_groups`
+--
+
+CREATE TABLE `qa_users_groups` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL,
+  `group_id` mediumint(8) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Zrzut danych tabeli `qa_users_groups`
+--
+
+INSERT INTO `qa_users_groups` (`id`, `user_id`, `group_id`) VALUES
+(1, 1, 1),
+(2, 1, 2);
 
 --
 -- Indeksy dla zrzutów tabel
@@ -159,6 +237,18 @@ INSERT INTO `qa_users` (`id`, `name`, `dob`, `gender`, `email`, `password_hash`,
 ALTER TABLE `qa_answers`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `id` (`id`);
+
+--
+-- Indexes for table `qa_groups`
+--
+ALTER TABLE `qa_groups`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `qa_login_attempts`
+--
+ALTER TABLE `qa_login_attempts`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `qa_questions`
@@ -192,8 +282,16 @@ ALTER TABLE `qa_tags`
 -- Indexes for table `qa_users`
 --
 ALTER TABLE `qa_users`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `qa_users_groups`
+--
+ALTER TABLE `qa_users_groups`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id` (`id`);
+  ADD UNIQUE KEY `uc_users_groups` (`user_id`,`group_id`),
+  ADD KEY `fk_users_groups_users1_idx` (`user_id`),
+  ADD KEY `fk_users_groups_groups1_idx` (`group_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -204,6 +302,16 @@ ALTER TABLE `qa_users`
 --
 ALTER TABLE `qa_answers`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT dla tabeli `qa_groups`
+--
+ALTER TABLE `qa_groups`
+  MODIFY `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT dla tabeli `qa_login_attempts`
+--
+ALTER TABLE `qa_login_attempts`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT dla tabeli `qa_questions`
 --
@@ -228,7 +336,23 @@ ALTER TABLE `qa_tags`
 -- AUTO_INCREMENT dla tabeli `qa_users`
 --
 ALTER TABLE `qa_users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT dla tabeli `qa_users_groups`
+--
+ALTER TABLE `qa_users_groups`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- Ograniczenia dla zrzutów tabel
+--
+
+--
+-- Ograniczenia dla tabeli `qa_users_groups`
+--
+ALTER TABLE `qa_users_groups`
+  ADD CONSTRAINT `fk_users_groups_groups1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_users_groups_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
