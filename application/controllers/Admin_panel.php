@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class AdminPanel extends CI_Controller {
+class Admin_panel extends CI_Controller {
 
 	/**
 	 * Index Page for this controller.
