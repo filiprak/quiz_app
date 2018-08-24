@@ -49,6 +49,13 @@ class DataTable
         if (is_array($options['buttons'])) {
             $html_btns = '';
             foreach ($options['buttons'] as $btn) {
+                if (is_array($btn['href_append'])) {
+                    $append = array();
+                    foreach ($btn['href_append'] as $key) {
+                        if (isset($data->$key)) array_push($append, $data->$key);
+                    }
+                    $btn['href'] .= '/' . implode('/', $append);
+                }
                 $html_btns .= '<a href="' . $btn['href'] . '" class="ui ' . $btn['design'] . ' button">'
                     . ($btn['icon'] ? '<i class="' . $btn['icon'] . ' icon"></i>' : '')
                     . '<span>' . $btn['label'] . '</span></a>';
@@ -92,18 +99,8 @@ class DataTable
 
         return '<tfoot>
                 <tr><th colspan="' . $this->colspan . '">
-                        <div class="ui right floated small pagination menu">
-                            <a class="icon item">
-                                <i class="left chevron icon"></i>
-                            </a>
-                            <a class="item">1</a>
-                            <a class="item">2</a>
-                            <a class="item active">3</a>
-                            <a class="item">4</a>
-                            <a class="icon item">
-                                <i class="right chevron icon"></i>
-                            </a>
-                        </div>
+                        
+                        '. $this->render_pagination($this->pagination) .'
                         <div class="ui left floated">' . $html_btns . '</div>
                     </th>
                 </tr></tfoot>';
@@ -111,7 +108,35 @@ class DataTable
 
     private function render_pagination($options=array())
     {
+        $href_base = (string) $options['href_base'];
+        $total = (int) $options['total'];
+        $page = (int) $options['page'];
+        $perpage = is_numeric($options['perpage']) ? (int) $options['perpage'] : 10;
 
+        $total_pages = (int) ($total / $perpage) + (((int) ($total / $perpage)) != ($total / $perpage) ? 1 : 0);
+
+        if (is_array($options) && count($options) > 0) {
+            $islast = $page >= $total_pages;
+            $isfirst = $page == 1;
+            $item1 = $page - 2 > 0 ? '<a href="' . $href_base . ($page - 2) . '" class="item">'.($page - 2).'</a>' : '';
+            $item2 = $page - 1 > 0 ? '<a href="' . $href_base . ($page - 1) . '" class="item">'.($page - 1).'</a>' : '';
+            $item3 = '<a class="item active">'.$page.'</a>';
+            $item4 = $page + 1 <= $total_pages ? '<a href="' . $href_base . ($page + 1) . '" class="item">'.($page + 1).'</a>' : '';
+            $item5 = $page + 2 <= $total_pages ? '<a href="' . $href_base . ($page + 2) . '" class="item">'.($page + 2).'</a>' : '';
+            return '<div class="">
+                        
+                        <div class="ui right floated small pagination menu">
+                            <a href="' . $href_base . 1 . '" class="icon item '. ($isfirst ? 'disabled' : '') .'">
+                                <i class="left chevron icon"></i>
+                            </a>
+                            '.$item1.$item2.$item3.$item4.$item5.'
+                            <a href="' . $href_base . $total_pages . '" class="icon item '. ($islast ? 'disabled' : '') .'">
+                                <i class="right chevron icon"></i>
+                            </a>
+                        </div>
+                    </div>';
+        }
+        return '';
     }
 
     function render()

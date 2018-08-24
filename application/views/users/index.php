@@ -4,8 +4,8 @@
 <?php include 'application/views/admin_panel/partial/header.php'; ?>
 
 <?php if (!empty($message)) { ?>
-    <div class="ui message info">
-        <ul><?php echo $message; ?></ul>
+    <div class="ui message warning">
+        <?php echo $message; ?>
     </div>
 <?php } ?>
 
@@ -21,15 +21,20 @@
     ),
     'row' => array(
         'buttons' => array(
-            array('icon' => 'edit', 'design' => 'small blue icon', 'href' => 'users/edit_user'),
-            array('icon' => 'trash', 'design' => 'small red icon', 'href' => 'users/remove_user'),
+            array('icon' => 'edit', 'design' => 'small blue icon',
+                'href' => base_url() . 'index.php/users/edit_user',
+                'href_append' => array('id')),
+            array('icon' => 'trash', 'design' => 'small red icon',
+                'href' => base_url() . 'index.php/users/remove_user',
+                'href_append' => array('id')),
         )
     ),
     'footer' => array(
         'buttons' => array(
-            array('icon' => 'plus', 'design' => 'small green', 'label' => 'Create User', 'href' => 'users/create_user')
+            array('icon' => 'plus', 'design' => 'small green', 'label' => 'Create User', 'href' => base_url() . 'index.php/users/create_user')
         )
-    )
+    ),
+    'pagination' => $pagination
 ));
 echo $usersdt->render(); ?>
 
