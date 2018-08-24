@@ -61,7 +61,7 @@
                 </a>
             </div>
             <div class="ui left floated">
-                <button class="ui small green button"><i class="add icon"></i>new</button>
+                <a href="tags" class="ui small green button"><i class="add icon"></i>new</a>
             </div>
         </th>
     </tr></tfoot>

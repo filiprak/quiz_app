@@ -11,3 +11,13 @@
 .padding-30 {
   padding: 30px;
 }
+.login .column {
+  max-width: 450px;
+}
+.login {
+  height: 100%;
+  width: 100%;
+}
+body.login-body {
+  background-color: #ebebeb;
+}

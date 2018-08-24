@@ -1,28 +1,44 @@
-<h1><?php echo lang('login_heading');?></h1>
-<p><?php echo lang('login_subheading');?></p>
+<?php include 'application/views/partial/header.php'; ?>
 
-<div id="infoMessage"><?php echo $message;?></div>
+<body class="login-body">
+<div class="ui middle aligned center aligned grid login">
+    <div style="max-width: 450px"  class="column">
+        <h2 class="ui teal header">
+            <div class="content"><?php echo lang('login_heading');?></div>
+        </h2>
+        <div style="display: <?php echo empty($message) ? 'none' : 'block'; ?>" class="ui error message">
+            <ul class="list">
+                <?php echo $message;?>
+            </ul>
+        </div>
+        <form class="ui large form" action="login" method="POST">
+            <div class="ui stacked segment">
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="user icon"></i>
+                        <?php echo form_input($identity, '', 'placeholder=Email');?>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="lock icon"></i>
+                        <?php echo form_input($password, '', 'placeholder=Password');?>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui checkbox">
+                        <?php echo form_checkbox('remember', '1', FALSE, 'id="remember" class="ui checkbox"');?>
+                        <?php echo lang('login_remember_label', 'remember');?>
+                    </div>
+                </div>
+                <input type="submit" class="ui fluid large teal submit button" value="<?php echo lang('login_submit_btn'); ?>">
+            </div>
 
-<?php echo form_open("auth/login");?>
+        </form>
 
-  <p>
-    <?php echo lang('login_identity_label', 'identity');?>
-    <?php echo form_input($identity);?>
-  </p>
-
-  <p>
-    <?php echo lang('login_password_label', 'password');?>
-    <?php echo form_input($password);?>
-  </p>
-
-  <p>
-    <?php echo lang('login_remember_label', 'remember');?>
-    <?php echo form_checkbox('remember', '1', FALSE, 'id="remember"');?>
-  </p>
-
-
-  <p><?php echo form_submit('submit', lang('login_submit_btn'));?></p>
-
-<?php echo form_close();?>
-
-<p><a href="forgot_password"><?php echo lang('login_forgot_password');?></a></p>
+        <div class="ui message">
+            <?php echo lang('login_forgot_password');?> <a href="forgot_password">click here</a>
+        </div>
+    </div>
+</div>
+</body>

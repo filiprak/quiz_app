@@ -1,7 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Admin_panel extends CI_Controller {
+include_once 'Secure_area.php';
+
+class Admin_panel extends Secure_area {
 
 	/**
 	 * Index Page for this controller.
@@ -26,35 +28,4 @@ class Admin_panel extends CI_Controller {
 		$this->load->view('admin_panel/index', $data);
 	}
 
-    public function users()
-    {
-        $data = array(
-            'page_title' => 'Users'
-        );
-        $this->load->view('admin_panel/users', $data);
-    }
-
-    public function questions()
-    {
-        $data = array(
-            'page_title' => 'Questions'
-        );
-        $this->load->view('admin_panel/questions', $data);
-    }
-
-    public function tags()
-    {
-        $data = array(
-            'page_title' => 'Tags'
-        );
-        $this->load->view('admin_panel/tags', $data);
-    }
-
-    public function scores()
-    {
-        $data = array(
-            'page_title' => 'Scores'
-        );
-        $this->load->view('admin_panel/scores', $data);
-    }
 }

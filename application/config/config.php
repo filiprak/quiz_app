@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+//error reporting
+error_reporting(E_ERROR | E_PARSE);
+
 /*
 |--------------------------------------------------------------------------
 | Base Site URL
