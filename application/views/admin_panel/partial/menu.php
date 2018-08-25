@@ -16,7 +16,7 @@ $menu = array(
 <div class="ui visible left sidebar vertical inverted black main menu">
     <div class="item">
         <a href="<?php echo base_url() . 'index.php/admin_panel/index'; ?>" class="ui logo icon image ">
-            <img src="<?php echo base_url() . 'assets/img/logo.png'; ?>">
+            <img src="<?php echo base_url() . 'assets/img/logo-ci.png'; ?>">
         </a>
         <span><b>Quiz App</b></span>
     </div>
