@@ -13,18 +13,26 @@
     'header' => array(
         'data' => array(
             'id' => 'ID',
-            'first_name' => 'First Name',
-            'last_name' => 'Last Name',
-            'username' => 'Username',
-            'email' => 'E-mail'
+            'first_name' => array(
+                'title' => 'First Name',
+                'type' => 'utf-8'),
+            'last_name' => array(
+                'title' => 'Last Name',
+                'type' => 'utf-8'),
+            'email' => 'E-mail',
+            'is_admin' => array(
+                'title' => 'Is Admin',
+                'type' => 'boolean',
+                'format' => array('icons' => array('green checkmark'))),
+
         )
     ),
     'row' => array(
         'buttons' => array(
-            array('icon' => 'edit', 'design' => 'small blue icon',
+            array('icon' => 'edit', 'design' => 'small icon',
                 'href' => base_url() . 'index.php/users/edit_user',
                 'href_append' => array('id')),
-            array('icon' => 'trash', 'design' => 'small red icon',
+            array('icon' => 'trash', 'design' => 'small icon',
                 'href' => base_url() . 'index.php/users/remove_user',
                 'href_append' => array('id')),
         )
@@ -36,6 +44,6 @@
     ),
     'pagination' => $pagination
 ));
-echo $usersdt->render(); ?>
+echo $usersdt->render();?>
 
 <?php include 'application/views/admin_panel/partial/footer.php'; ?>

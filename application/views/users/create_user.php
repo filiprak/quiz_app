@@ -58,6 +58,7 @@
     <div class="field">
         <?php echo form_submit('submit', lang('create_user_submit_btn'),
             'class="ui right floated blue submit button"');?>
+        <a class="ui right floated button" href="<?php echo base_url() . 'index.php/users' ?>">Back</a>
     </div>
 
     <?php echo form_close();?>

@@ -1,26 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-include_once 'Secure_area.php';
+include_once 'Admin_panel.php';
 
-class Users extends Secure_area
+class Users extends Admin_panel
 {
 
-    /**
-     * Index Page for this controller.
-     *
-     * Maps to the following URL
-     *        http://example.com/index.php/welcome
-     *    - or -
-     *        http://example.com/index.php/welcome/index
-     *    - or -
-     * Since this controller is set as the default controller in
-     * config/routes.php, it's displayed at http://example.com/
-     *
-     * So any other public methods not prefixed with an underscore will
-     * map to /index.php/welcome/<method_name>
-     * @see https://codeigniter.com/user_guide/general/urls.html
-     */
     public function __construct()
     {
         parent::__construct();
@@ -37,8 +22,10 @@ class Users extends Secure_area
         $perpage = 10;
         $users = $this->ion_auth->offset($perpage * ($page - 1))->limit($perpage)->users()->result();
 
-        $data = array(
+        $this->data = array(
             'page_title' => 'Users',
+            'logged_user' => parent::logged_user(),
+            'is_admin' => parent::is_admin(),
             // set the flash data error message if there is one
             'message' => (validation_errors()) ? validation_errors() : $this->session->flashdata('message'),
             'users' => $users,
@@ -47,12 +34,20 @@ class Users extends Secure_area
                 'page' => $page,
                 'perpage' => $perpage,
                 'href_base' => base_url() . 'index.php/users/index?page='
-            )
+            ),
         );
-        foreach ($data['users'] as $k => $user) {
-            $data['users'][$k]->groups = $this->ion_auth->get_users_groups($user->id)->result();
+        foreach ($this->data['users'] as $k => $user) {
+            $user_groups = $this->ion_auth->get_users_groups($user->id)->result();
+            $is_admin = false;
+            foreach ($user_groups as $group) {
+                if ($group->name == 'admin') {
+                    $is_admin = true;
+                    break;
+                }
+            }
+            $this->data['users'][$k]->is_admin = $is_admin;//array_column($user_groups, 'name');//(bool)$is_admin;
         }
-        $this->load->view('users/index', $data);
+        $this->load->view('users/index', $this->data);
     }
 
     public function create_user()
@@ -62,11 +57,11 @@ class Users extends Secure_area
             redirect('users', 'refresh');
         }
 
-        $data['page_title'] = 'Create User';
+        $this->data['page_title'] = 'Create User';
 
         $tables = $this->ion_auth->config->item('tables', 'ion_auth');
         $identity_column = $this->ion_auth->config->item('identity', 'ion_auth');
-        $data['identity_column'] = $identity_column;
+        $this->data['identity_column'] = $identity_column;
 
         // validate form input
         $this->form_validation->set_rules('first_name', $this->lang->line('create_user_validation_fname_label'), 'trim|required');
@@ -102,58 +97,58 @@ class Users extends Secure_area
         } else {
             // display the create user form
             // set the flash data error message if there is one
-            $data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+            $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
-            $data['first_name'] = array(
+            $this->data['first_name'] = array(
                 'name' => 'first_name',
                 'id' => 'first_name',
                 'type' => 'text',
                 'value' => $this->form_validation->set_value('first_name'),
             );
-            $data['last_name'] = array(
+            $this->data['last_name'] = array(
                 'name' => 'last_name',
                 'id' => 'last_name',
                 'type' => 'text',
                 'value' => $this->form_validation->set_value('last_name'),
             );
-            $data['identity'] = array(
+            $this->data['identity'] = array(
                 'name' => 'identity',
                 'id' => 'identity',
                 'type' => 'text',
                 'value' => $this->form_validation->set_value('identity'),
             );
-            $data['email'] = array(
+            $this->data['email'] = array(
                 'name' => 'email',
                 'id' => 'email',
                 'type' => 'text',
                 'value' => $this->form_validation->set_value('email'),
             );
-            $data['company'] = array(
+            $this->data['company'] = array(
                 'name' => 'company',
                 'id' => 'company',
                 'type' => 'text',
                 'value' => $this->form_validation->set_value('company'),
             );
-            $data['phone'] = array(
+            $this->data['phone'] = array(
                 'name' => 'phone',
                 'id' => 'phone',
                 'type' => 'text',
                 'value' => $this->form_validation->set_value('phone'),
             );
-            $data['password'] = array(
+            $this->data['password'] = array(
                 'name' => 'password',
                 'id' => 'password',
                 'type' => 'password',
                 'value' => $this->form_validation->set_value('password'),
             );
-            $data['password_confirm'] = array(
+            $this->data['password_confirm'] = array(
                 'name' => 'password_confirm',
                 'id' => 'password_confirm',
                 'type' => 'password',
                 'value' => $this->form_validation->set_value('password_confirm'),
             );
 
-            $this->load->view('users/create_user', $data);
+            $this->load->view('users/create_user', $this->data);
         }
     }
 
@@ -166,7 +161,7 @@ class Users extends Secure_area
 
         $user_id = (int)$user_id;
 
-        $data = array(
+        $this->data = array(
             'page_title' => 'Edit User'
         );
 
@@ -193,7 +188,7 @@ class Users extends Secure_area
             }
 
             if ($this->form_validation->run() === TRUE) {
-                $data = array(
+                $this->data = array(
                     'first_name' => $this->input->post('first_name'),
                     'last_name' => $this->input->post('last_name'),
                     'company' => $this->input->post('company'),
@@ -202,7 +197,7 @@ class Users extends Secure_area
 
                 // update the password if it was posted
                 if ($this->input->post('password')) {
-                    $data['password'] = $this->input->post('password');
+                    $this->data['password'] = $this->input->post('password');
                 }
 
                 // Only allow updating groups if user is admin
@@ -222,7 +217,7 @@ class Users extends Secure_area
                 }
 
                 // check to see if we are updating the user
-                if ($this->ion_auth->update($user->id, $data)) {
+                if ($this->ion_auth->update($user->id, $this->data)) {
                     // redirect them back to the admin page if admin, or to the base url if non admin
                     $this->session->set_flashdata('message', $this->ion_auth->messages());
                     redirect('users', 'refresh');
@@ -238,49 +233,49 @@ class Users extends Secure_area
 
         // display the edit user form
         // set the flash data error message if there is one
-        $data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+        $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
 
         // pass the user to the view
-        $data['user'] = $user;
-        $data['groups'] = $groups;
-        $data['currentGroups'] = $currentGroups;
+        $this->data['user'] = $user;
+        $this->data['groups'] = $groups;
+        $this->data['currentGroups'] = $currentGroups;
 
-        $data['first_name'] = array(
+        $this->data['first_name'] = array(
             'name' => 'first_name',
             'id' => 'first_name',
             'type' => 'text',
             'value' => $this->form_validation->set_value('first_name', $user->first_name),
         );
-        $data['last_name'] = array(
+        $this->data['last_name'] = array(
             'name' => 'last_name',
             'id' => 'last_name',
             'type' => 'text',
             'value' => $this->form_validation->set_value('last_name', $user->last_name),
         );
-        $data['company'] = array(
+        $this->data['company'] = array(
             'name' => 'company',
             'id' => 'company',
             'type' => 'text',
             'value' => $this->form_validation->set_value('company', $user->company),
         );
-        $data['phone'] = array(
+        $this->data['phone'] = array(
             'name' => 'phone',
             'id' => 'phone',
             'type' => 'text',
             'value' => $this->form_validation->set_value('phone', $user->phone),
         );
-        $data['password'] = array(
+        $this->data['password'] = array(
             'name' => 'password',
             'id' => 'password',
             'type' => 'password'
         );
-        $data['password_confirm'] = array(
+        $this->data['password_confirm'] = array(
             'name' => 'password_confirm',
             'id' => 'password_confirm',
             'type' => 'password'
         );
 
-        $this->load->view('users/edit_user', $data);
+        $this->load->view('users/edit_user', $this->data);
     }
 
     public function remove_user($user_id = null)
@@ -300,11 +295,11 @@ class Users extends Secure_area
             redirect('users', 'refresh');
         }
 
-        $data = array(
+        $this->data = array(
             'page_title' => 'Remove User',
             'user' => $this->ion_auth->user((int)$user_id)->row()
         );
 
-        $this->load->view('users/remove_user', $data);
+        $this->load->view('users/remove_user', $this->data);
     }
 }

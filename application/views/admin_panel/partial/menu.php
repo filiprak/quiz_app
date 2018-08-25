@@ -4,7 +4,15 @@
             <a href="<?php echo base_url() . 'index.php/admin_panel/index'; ?>" class="ui logo icon image ">
                 <img src="<?php echo base_url() . 'assets/img/logo.png'; ?>">
             </a>
-            <span><b>Admin Panel</b></span>
+            <span><b>Quiz App</b></span>
+        </div>
+
+        <div class="item"><i class="icon user"></i>
+            <?php echo htmlspecialchars($logged_user->first_name . ' ' . $logged_user->last_name); ?>
+        </div>
+
+        <div class="item borderless">
+
         </div>
 
         <a class="item" href="<?php echo base_url() . 'index.php/users'; ?>">Users</a>
@@ -13,7 +21,12 @@
         <a class="item" href="<?php echo base_url() . 'index.php/suggestions'; ?>">Suggestions</a>
         <a class="item" href="<?php echo base_url() . 'index.php/tags'; ?>">Tags</a>
         <a class="item" href="<?php echo base_url() . 'index.php/scores'; ?>">Scores</a>
-        <a class="item" href="<?php echo base_url() . 'index.php/auth/logout'; ?>"><i class="icon sign-out"></i><b>Logout</b></a>
+
+        <div class="item">
+
+        </div>
+
+        <a class="item borderless" href="<?php echo base_url() . 'index.php/auth/logout'; ?>"><i class="icon sign-out"></i><b>Logout</b></a>
 
     </div>
 </div>

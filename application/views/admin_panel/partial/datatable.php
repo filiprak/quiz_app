@@ -2,7 +2,7 @@
 
 class DataTable
 {
-    function __construct($data=array(), $options=array())
+    function __construct($data = array(), $options = array())
     {
         // default options
         $options['header'] = is_array($options['header']) ? $options['header'] : array(
@@ -36,13 +36,38 @@ class DataTable
         if ($this->row_has_buttons) $this->colspan += 1;
     }
 
-    private function render_row($data=array(), $options=array())
+    private function render_row($data = array(), $options = array())
     {
         $html_output = '<tr>';
 
         $data = is_array($data) || is_object($data) ? $data : array();
-        foreach ($this->header['data'] as $key => $val) {
+        foreach ($this->header['data'] as $key => $opts) {
             $cell_data = isset($data->$key) ? $data->$key : '';
+            $type = isset($opts['type']) ? $opts['type'] : false;
+            if ($type == 'utf-8') {
+                $cell_data = htmlspecialchars($cell_data, ENT_QUOTES, 'UTF-8');
+            } else if ($type == 'date' || $type == 'datetime') {
+                $format = is_string($opts['format']) ? $opts['format'] : ($type == 'date' ? 'd-m-Y' : 'd-m-Y H:i:s');
+                if (is_string($cell_data)) $cell_data = date($format, strtotime($cell_data));
+                else if (is_numeric($cell_data)) $cell_data = date($format, $cell_data);
+                else $cell_data = '';
+            }
+            else if ($type == 'number') {
+                $format = is_array($opts['format']) ? $opts['format'] : array();
+                $decimals = is_numeric($format['decimals']) ? $format['decimals'] : 0;
+                $cell_data = number_format($cell_data, $decimals);
+            } else if ($type == 'boolean') {
+                $format = is_array($opts['format']) ? $opts['format'] : array();
+                $icons = is_array($format['icons']) ? $format['icons'] : false;
+                $strings = is_array($format['strings']) ? $format['strings'] : false;
+                if ($icons) {
+                    $cell_data = $cell_data ? '<i class="icon ' . $icons[0] .'">' .
+                        htmlspecialchars($strings[0], ENT_QUOTES, 'UTF-8') .'</i></div>' :
+                        '<i class="icon ' . $icons[1] .'">' . htmlspecialchars($strings[1], ENT_QUOTES, 'UTF-8') .'</i>';
+                } else {
+                    $cell_data = htmlspecialchars($cell_data ? $strings[0] : $strings[1], ENT_QUOTES, 'UTF-8');
+                }
+            }
             $html_output .= '<td>' . $cell_data . '</td>';
         }
 
@@ -68,13 +93,19 @@ class DataTable
         return $html_output . '</tr>';
     }
 
-    private function render_header($options=array())
+    private function render_header($options = array())
     {
         $html_output = '<thead><tr>';
 
         $data = is_array($options['data']) ? $options['data'] : array();
         foreach ($data as $key => $val) {
-            $html_output .= '<th>' . $val . '</th>';
+            if (is_array($val)) {
+                $html_output .= '<th>' . htmlspecialchars($val['title'], ENT_QUOTES, 'UTF-8') . '</th>';
+            } elseif (is_string($val)) {
+                $html_output .= '<th>' . htmlspecialchars($val, ENT_QUOTES, 'UTF-8') . '</th>';
+            } else {
+                $html_output .= '<th></th>';
+            }
         }
 
         if ($this->row_has_buttons) {
@@ -84,7 +115,7 @@ class DataTable
         return $html_output . '</tr></thead>';
     }
 
-    private function render_footer($options=array())
+    private function render_footer($options = array())
     {
         $buttons = $options['buttons'];
 
@@ -100,40 +131,38 @@ class DataTable
         return '<tfoot>
                 <tr><th colspan="' . $this->colspan . '">
                         
-                        '. $this->render_pagination($this->pagination) .'
+                        ' . $this->render_pagination($this->pagination) . '
                         <div class="ui left floated">' . $html_btns . '</div>
                     </th>
                 </tr></tfoot>';
     }
 
-    private function render_pagination($options=array())
+    private function render_pagination($options = array())
     {
-        $href_base = (string) $options['href_base'];
-        $total = (int) $options['total'];
-        $page = (int) $options['page'];
-        $perpage = is_numeric($options['perpage']) ? (int) $options['perpage'] : 10;
+        $href_base = (string)$options['href_base'];
+        $total = (int)$options['total'];
+        $page = (int)$options['page'];
+        $perpage = is_numeric($options['perpage']) ? (int)$options['perpage'] : 10;
 
-        $total_pages = (int) ($total / $perpage) + (((int) ($total / $perpage)) != ($total / $perpage) ? 1 : 0);
+        $total_pages = (int)($total / $perpage) + (((int)($total / $perpage)) != ($total / $perpage) ? 1 : 0);
 
         if (is_array($options) && count($options) > 0) {
             $islast = $page >= $total_pages;
             $isfirst = $page == 1;
-            $item1 = $page - 2 > 0 ? '<a href="' . $href_base . ($page - 2) . '" class="item">'.($page - 2).'</a>' : '';
-            $item2 = $page - 1 > 0 ? '<a href="' . $href_base . ($page - 1) . '" class="item">'.($page - 1).'</a>' : '';
-            $item3 = '<a class="item active">'.$page.'</a>';
-            $item4 = $page + 1 <= $total_pages ? '<a href="' . $href_base . ($page + 1) . '" class="item">'.($page + 1).'</a>' : '';
-            $item5 = $page + 2 <= $total_pages ? '<a href="' . $href_base . ($page + 2) . '" class="item">'.($page + 2).'</a>' : '';
-            return '<div class="">
-                        
-                        <div class="ui right floated small pagination menu">
-                            <a href="' . $href_base . 1 . '" class="icon item '. ($isfirst ? 'disabled' : '') .'">
-                                <i class="left chevron icon"></i>
-                            </a>
-                            '.$item1.$item2.$item3.$item4.$item5.'
-                            <a href="' . $href_base . $total_pages . '" class="icon item '. ($islast ? 'disabled' : '') .'">
-                                <i class="right chevron icon"></i>
-                            </a>
-                        </div>
+            $item1 = $page - 2 > 0 ? '<a href="' . $href_base . ($page - 2) . '" class="item">' . ($page - 2) . '</a>' : '';
+            $item2 = $page - 1 > 0 ? '<a href="' . $href_base . ($page - 1) . '" class="item">' . ($page - 1) . '</a>' : '';
+            $item3 = '<a class="item active">' . $page . '</a>';
+            $item4 = $page + 1 <= $total_pages ? '<a href="' . $href_base . ($page + 1) . '" class="item">' . ($page + 1) . '</a>' : '';
+            $item5 = $page + 2 <= $total_pages ? '<a href="' . $href_base . ($page + 2) . '" class="item">' . ($page + 2) . '</a>' : '';
+            return '<div class="ui right floated small pagination menu">
+                        <a ' . ($isfirst ? '' : 'href="' . $href_base . 1 . '"') . ' class="icon item ' . ($isfirst ? 'disabled' : '') . '">
+                            <i class="left chevron icon"></i>
+                        </a>
+                        ' . $item1 . $item2 . $item3 . $item4 . $item5 . '
+                        <a ' . ($islast ? '' : 'href="' . $href_base . $total_pages . '"') . ' class="icon item ' . ($islast ? 'disabled' : '') . '">
+                            <i class="right chevron icon"></i>
+                        </a>
+                        <div class="red item">Total rows: ' . number_format($total, 0) . '</div>
                     </div>';
         }
         return '';
@@ -142,7 +171,7 @@ class DataTable
     function render()
     {
         $design = $this->options['design'];
-        $html_output = '<table class="ui '.$design.' table">';
+        $html_output = '<table class="ui ' . $design . ' table">';
 
         $html_output .= $this->render_header($this->header);
         $html_output .= '<tbody>';
