@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Czas generowania: 25 Sie 2018, 00:49
+-- Czas generowania: 26 Sie 2018, 00:53
 -- Wersja serwera: 5.7.22-0ubuntu0.16.04.1
 -- Wersja PHP: 5.6.37-1+ubuntu16.04.1+deb.sury.org+1
 
@@ -34,8 +34,27 @@ CREATE TABLE `qa_answers` (
   `score_I` int(16) NOT NULL,
   `score_C` int(16) NOT NULL,
   `score_P` int(16) NOT NULL,
-  `next_question_group_id` int(11) NOT NULL
+  `next_question_group_id` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
+  `position` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Zrzut danych tabeli `qa_answers`
+--
+
+INSERT INTO `qa_answers` (`id`, `question_id`, `answer`, `score_A`, `score_I`, `score_C`, `score_P`, `next_question_group_id`, `position`) VALUES
+(1, 23, 'red', 0, 0, 0, 0, 'group3', 1),
+(2, 23, 'blue', 0, 0, 0, 0, 'group4', 2),
+(3, 23, 'green', 0, 0, 0, 0, 'group2', 3),
+(4, 23, 'black', 0, 0, 0, 0, 'group1', 4),
+(9, 25, '3', 0, 0, 0, 0, 'group3', 1),
+(10, 25, '5', 0, 0, 0, 0, 'group2', 3),
+(12, 26, 'blue', 0, 0, 0, 0, 'group4', 2),
+(13, 26, 'green', 0, 0, 0, 0, 'group2', 3),
+(14, 26, 'black', 0, 0, 0, 0, 'group1', 4),
+(31, 1, 'no', 0, 0, 0, 0, 'group3', 1),
+(32, 1, 'yes', 0, 0, 0, 0, 'group4', 2),
+(34, 1, 'asdasd', 1, 0, 0, 0, 'asdasd', 4);
 
 -- --------------------------------------------------------
 
@@ -70,6 +89,14 @@ CREATE TABLE `qa_login_attempts` (
   `time` int(11) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Zrzut danych tabeli `qa_login_attempts`
+--
+
+INSERT INTO `qa_login_attempts` (`id`, `ip_address`, `login`, `time`) VALUES
+(2, '127.0.0.1', 'tech123', 1535211369),
+(3, '127.0.0.1', 'tech123', 1535211370);
+
 -- --------------------------------------------------------
 
 --
@@ -79,8 +106,36 @@ CREATE TABLE `qa_login_attempts` (
 CREATE TABLE `qa_questions` (
   `id` int(11) NOT NULL,
   `question` varchar(2048) COLLATE utf8_unicode_ci NOT NULL COMMENT 'The Question',
-  `group_id` int(11) NOT NULL COMMENT 'ID of the group the question belongs to'
+  `group_id` varchar(512) COLLATE utf8_unicode_ci NOT NULL COMMENT 'ID of the group the question belongs to'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Zrzut danych tabeli `qa_questions`
+--
+
+INSERT INTO `qa_questions` (`id`, `question`, `group_id`) VALUES
+(1, 'Do you like pancakes ?', 'group1'),
+(2, 'The actor John Gielgud believed that of all Shakespeare\'s characters Hamlet is probably the one most like Shakespeare himself–since, of all Shakespeare\'s characters, only Hamlet can be imagined to have written all the Shakespearean plays. How good an understanding of Hamlet\'s character does Gielgud\'s belief reflect?', 'group1'),
+(3, '	What is meant by the phrase "the rise of religious fundamentalism"? Is it an actual current phenomenon? If so, what accounts for its occurrence at this point in history?', 'group1'),
+(4, 'Your summer vacation–what was it really like?\r\n', 'group2'),
+(5, 'What is time?\r\n', 'group3'),
+(6, 'What determines what dreams a person has when he or she sleeps?\r\n', 'group3'),
+(7, 'Is there intelligent life elsewhere in the universe?\r\n', 'group1'),
+(8, 'Arm on the left, arm on the right.  Eye on the left, eye on the right. Nose in the middle. Mouth in the middle. –Why is the outward appearance of the human body so symmetrical?\r\n', 'group4'),
+(9, 'What, exactly, is it about good jokes that makes people laugh?\r\n', 'group1'),
+(11, '	What is meant by the phrase "the rise of religious fundamentalism"? Is it an actual current phenomenon? If so, what accounts for its occurrence at this point in history?', 'group1'),
+(12, 'According to Lord Acton, "Power corrupts and absolute power corrupts absolutely." Comment, taking a historical perspective.\r\n', 'group2'),
+(13, 'How does your generation differ from that of the 1960\'s?*\r\n', 'group3'),
+(14, 'Walter Kerr has argued that comedy, at bottom, is pessimistic, tragedy optimistic. Is he right?\r\n', 'group3'),
+(15, 'Various countries–the United Kingdom, India, Pakistan, Israel, the Philippines–have already elected female chief executives. Why has the U.S., which is arguably the world\'s leading democracy, not yet done so?\r\n', 'group5'),
+(16, 'Do human beings have free will?\r\n', 'group4'),
+(17, 'How many kilometers length have the earth radius ?', 'group_test'),
+(18, 'd', 'group2'),
+(19, 'test', 'group_test'),
+(21, 'wqeqwewqe', 'qweqweqwe'),
+(23, 'What color do you like ?', 'group2'),
+(25, 'dqwewqe', 'group_test'),
+(26, 'What color do you like ?', 'group2');
 
 -- --------------------------------------------------------
 
@@ -193,7 +248,7 @@ CREATE TABLE `qa_users` (
 --
 
 INSERT INTO `qa_users` (`id`, `ip_address`, `username`, `password`, `salt`, `email`, `activation_code`, `forgotten_password_code`, `forgotten_password_time`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`) VALUES
-(1, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', 'admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1535150282, 1, 'Admin', 'istrator', 'ADMIN', '0'),
+(1, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', 'admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1535191575, 1, 'Admin', 'istrator', 'ADMIN', '0'),
 (2, '::1', 'test@test.com', '$2y$08$IrlbOvTg5A7inOIskAKqK.HpqlgDBVqs/Gs6dTG1Xn0M4tos3SY1.', NULL, 'test@test.com', NULL, NULL, NULL, NULL, 1535143031, NULL, 1, 'Test', 'Test', '', '2325345436'),
 (3, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', '1admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1268889823, 1, 'Admin', 'istrator', 'ADMIN', '0'),
 (5, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', '3admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1268889823, 1, 'Admin', 'istrator', 'ADMIN', '0'),
@@ -206,7 +261,8 @@ INSERT INTO `qa_users` (`id`, `ip_address`, `username`, `password`, `salt`, `ema
 (12, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', '8admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1268889823, 1, 'Admin', 'istrator', 'ADMIN', '0'),
 (13, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', '9admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1268889823, 1, 'Admin', 'istrator', 'ADMIN', '0'),
 (14, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', '10admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1268889823, 1, 'Admin', 'istrator', 'ADMIN', '0'),
-(15, '::1', 'j.kowals@gmail.com', '$2y$08$Wz5LsS5RRHjyp9byGEl.lewU27Rv4cAYMhExti2040P0RlevMxN92', NULL, 'j.kowals@gmail.com', NULL, NULL, NULL, NULL, 1535150163, NULL, 1, 'John', 'Kowalski', '', '');
+(15, '::1', 'j.kowals@gmail.com', '$2y$08$Wz5LsS5RRHjyp9byGEl.lewU27Rv4cAYMhExti2040P0RlevMxN92', NULL, 'j.kowals@gmail.com', NULL, NULL, NULL, NULL, 1535150163, NULL, 1, 'John', 'Kowalski', '', ''),
+(16, '::1', 'filiprak@wp.pl', '$2y$08$HXQ2t84.pmDFHyUt9PcCwucCIfQsPL8fg7U.EChDqFbBNtNLEZqYG', NULL, 'filiprak@wp.pl', NULL, 'DBtmtpDXBgdGN-Yk-hXLte55f97b1020857fcc2d', 1535236596, 'uTtC9qJs23eDdE5bLizeAe', 1535186203, 1535211398, 1, 'Filip', 'Rak', '', '');
 
 -- --------------------------------------------------------
 
@@ -228,12 +284,16 @@ INSERT INTO `qa_users_groups` (`id`, `user_id`, `group_id`) VALUES
 (1, 1, 1),
 (2, 1, 2),
 (24, 2, 2),
-(20, 5, 1),
-(21, 5, 2),
+(29, 3, 1),
+(27, 5, 1),
+(28, 5, 2),
+(30, 6, 1),
 (14, 8, 1),
 (18, 14, 1),
 (19, 14, 2),
-(25, 15, 2);
+(25, 15, 2),
+(32, 16, 1),
+(33, 16, 2);
 
 --
 -- Indeksy dla zrzutów tabel
@@ -309,7 +369,7 @@ ALTER TABLE `qa_users_groups`
 -- AUTO_INCREMENT dla tabeli `qa_answers`
 --
 ALTER TABLE `qa_answers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 --
 -- AUTO_INCREMENT dla tabeli `qa_groups`
 --
@@ -319,12 +379,12 @@ ALTER TABLE `qa_groups`
 -- AUTO_INCREMENT dla tabeli `qa_login_attempts`
 --
 ALTER TABLE `qa_login_attempts`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT dla tabeli `qa_questions`
 --
 ALTER TABLE `qa_questions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 --
 -- AUTO_INCREMENT dla tabeli `qa_scores`
 --
@@ -344,12 +404,12 @@ ALTER TABLE `qa_tags`
 -- AUTO_INCREMENT dla tabeli `qa_users`
 --
 ALTER TABLE `qa_users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 --
 -- AUTO_INCREMENT dla tabeli `qa_users_groups`
 --
 ALTER TABLE `qa_users_groups`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 --
 -- Ograniczenia dla zrzutów tabel
 --
