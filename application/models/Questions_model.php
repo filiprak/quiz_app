@@ -149,7 +149,6 @@ class Questions_model extends CI_Model
 
     public function get_all_groups() {
         return $this->db->query('SELECT DISTINCT group_id FROM qa_questions')
-            ->get()
             ->result_array();
     }
 }
