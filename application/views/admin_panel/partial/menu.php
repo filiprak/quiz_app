@@ -3,13 +3,18 @@
 $menu = array(
     'admin_panel' => array('href' => 'index.php/admin_panel', 'label' => 'Panel'),
     'users' => array('href' => 'index.php/users', 'label' => 'Users'),
-    'questions' => array('href' => 'index.php/questions', 'label' => 'Questions'),
-    'answers' => array('href' => 'index.php/answers', 'label' => 'Answers'),
+    'questions' => array('href' => 'index.php/questions', 'label' => 'Questions & Answers'),
     'suggestions' => array('href' => 'index.php/suggestions', 'label' => 'Suggestions'),
     'tags' => array('href' => 'index.php/tags', 'label' => 'Tags'),
     'scores' => array('href' => 'index.php/scores', 'label' => 'Scores'),
 );
 
+$current_controller = $this->router->fetch_class();
+$current_method = $this->router->fetch_method();
+
+if (strlen($current_controller) > 0) {
+    $menu[$current_controller]['active_class'] = 'active';
+}
 ?>
 
 
@@ -29,12 +34,12 @@ $menu = array(
     <div class="item"></div>
 
     <?php foreach ($menu as $key => $opts) {
-        echo '<a class="item" href="' . base_url() . $opts['href'] . '">' . $opts['label'] . '</a>';
+        echo '<a class="item ' . $opts['active_class'] . '" href="' . base_url() . $opts['href'] . '">' . $opts['label'] . '</a>';
     } ?>
 
     <div class="item borderless"></div>
 
-    <a class="item borderless" href="<?php echo base_url() . 'index.php/auth/logout'; ?>"><i
-                class="icon sign-out"></i><b>Logout</b></a>
+    <a class="item borderless" href="<?php echo base_url() . 'index.php/auth/logout'; ?>">
+        <i class="icon sign-out"></i>Sign&nbsp;Out</a>
 
 </div>

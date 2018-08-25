@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 include_once 'Admin_panel.php';
 
-class Users extends Admin_panel
+class Questions extends Admin_panel
 {
 
     public function __construct()
@@ -11,158 +11,84 @@ class Users extends Admin_panel
         parent::__construct();
         $this->load->helper('form');
         $this->load->library('form_validation');
-        $this->config->load('ion_auth');
-        $this->lang->load('auth');
-        $this->load->model('users_model');
+        $this->load->model('questions_model');
     }
 
     public function index()
     {
         $page = $this->input->get('page', TRUE);
-        $search_users = trim($this->input->get('search_users', TRUE));
+        $search_question = $this->input->get('search_question', TRUE);
 
         $page = is_numeric($page) ? (int)$page : 1;
         $perpage = 10;
 
-        $search_params = is_string($search_users) && strlen($search_users) > 0 ? array(
-            'first_name' => $search_users,
-            'last_name' => $search_users,
-            'email' => $search_users,
+        $search_params = is_string($search_question) && strlen($search_question) > 0 ? array(
+            'question' => $search_question,
+            'group_id' => $search_question
         ) : array();
-
-        $users = $this->users_model->find($search_params, array(
+        $questions = $this->questions_model->find($search_params, array(
             'limit' => $perpage,
             'offset' => $perpage * ($page - 1)
         ));
 
         $this->data = array(
-            'page_title' => 'Users',
-            'logged_user' => parent::logged_user(),
-            'is_admin' => parent::is_admin(),
+            'page_title' => 'Questions & Answers',
             // set the flash data error message if there is one
             'message' => (validation_errors()) ? validation_errors() : $this->session->flashdata('message'),
-            'users' => $users,
+            'questions' => $questions,
             'pagination' => array(
-                'total' => $this->users_model->total($search_params),
+                'total' => $this->questions_model->total($search_params),
                 'page' => $page,
                 'perpage' => $perpage,
-                'href_base' => base_url() . 'index.php/users/index?page='
+                'href_base' => base_url() . 'index.php/questions/index?page='
             ),
-            'search_users' => array('value' => $search_users, 'param_name' => 'search_users')
+            'search_question' => array('value' => $search_question, 'param_name' => 'search_question')
         );
-        foreach ($this->data['users'] as $k => $user) {
-            $user_groups = $this->ion_auth->get_users_groups($user['id'])->result();
-            $is_admin = false;
-            foreach ($user_groups as $group) {
-                if ($group->name == 'admin') {
-                    $is_admin = true;
-                    break;
-                }
-            }
-            $this->data['users'][$k]['is_admin'] = $is_admin;
-        }
-        $this->load->view('users/index', $this->data);
+        $this->load->view('questions/index', $this->data);
     }
 
-    public function create_user()
+    public function create_question()
     {
         if (!parent::is_admin()) {
             $this->session->set_flashdata('message', 'You have to be an admin to perform this action');
             redirect('users', 'refresh');
         }
 
-        $this->data['page_title'] = 'Create User';
-
-        $tables = $this->ion_auth->config->item('tables', 'ion_auth');
-        $identity_column = $this->ion_auth->config->item('identity', 'ion_auth');
-        $this->data['identity_column'] = $identity_column;
+        $this->data['page_title'] = 'Create Question';
 
         // validate form input
-        $this->form_validation->set_rules('first_name', $this->lang->line('create_user_validation_fname_label'), 'trim|required');
-        $this->form_validation->set_rules('last_name', $this->lang->line('create_user_validation_lname_label'), 'trim|required');
-        if ($identity_column !== 'email') {
-            $this->form_validation->set_rules('identity', $this->lang->line('create_user_validation_identity_label'), 'trim|required|is_unique[' . $tables['users'] . '.' . $identity_column . ']');
-            $this->form_validation->set_rules('email', $this->lang->line('create_user_validation_email_label'), 'trim|required|valid_email');
-        } else {
-            $this->form_validation->set_rules('email', $this->lang->line('create_user_validation_email_label'), 'trim|required|valid_email|is_unique[' . $tables['users'] . '.email]');
-        }
-        $this->form_validation->set_rules('phone', $this->lang->line('create_user_validation_phone_label'), 'trim');
-        $this->form_validation->set_rules('company', $this->lang->line('create_user_validation_company_label'), 'trim');
-        $this->form_validation->set_rules('password', $this->lang->line('create_user_validation_password_label'), 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|max_length[' . $this->config->item('max_password_length', 'ion_auth') . ']|matches[password_confirm]');
-        $this->form_validation->set_rules('password_confirm', $this->lang->line('create_user_validation_password_confirm_label'), 'required');
+        $this->form_validation->set_rules('question', 'question text', 'trim|required|max_length[2048]');
+        $this->form_validation->set_rules('group_id', 'group', 'trim|required|max_length[128]');
 
         if ($this->form_validation->run() === TRUE) {
-            $email = strtolower($this->input->post('email'));
-            $identity = ($identity_column === 'email') ? $email : $this->input->post('identity');
-            $password = $this->input->post('password');
-
-            $additional_data = array(
-                'first_name' => $this->input->post('first_name'),
-                'last_name' => $this->input->post('last_name'),
-                'company' => $this->input->post('company'),
-                'phone' => $this->input->post('phone'),
+            $question_data = array(
+                'question' => $this->input->post('question'),
+                'group_id' => $this->input->post('group_id'),
             );
         }
-        if ($this->form_validation->run() === TRUE && $this->ion_auth->register($identity, $password, $email, $additional_data)) {
-            // check to see if we are creating the user
+        if ($this->form_validation->run() === TRUE && $this->questions_model->create($question_data)) {
             // redirect them back to the admin page
-            $this->session->set_flashdata('message', $this->ion_auth->messages());
-            redirect("users/index", 'refresh');
+            $this->session->set_flashdata('message', 'New question was created successfully !');
+            redirect("questions/index", 'refresh');
         } else {
-            // display the create user form
+            // display the create form
             // set the flash data error message if there is one
-            $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+            $this->data['message'] = (validation_errors() ? validation_errors() : $this->session->flashdata('message'));
 
-            $this->data['first_name'] = array(
-                'name' => 'first_name',
-                'id' => 'first_name',
+            $this->data['question'] = array(
+                'name' => 'question',
+                'id' => 'question',
                 'type' => 'text',
-                'value' => $this->form_validation->set_value('first_name'),
+                'value' => $this->form_validation->set_value('question'),
             );
-            $this->data['last_name'] = array(
-                'name' => 'last_name',
-                'id' => 'last_name',
+            $this->data['group_id'] = array(
+                'name' => 'group_id',
+                'id' => 'group_id',
                 'type' => 'text',
-                'value' => $this->form_validation->set_value('last_name'),
-            );
-            $this->data['identity'] = array(
-                'name' => 'identity',
-                'id' => 'identity',
-                'type' => 'text',
-                'value' => $this->form_validation->set_value('identity'),
-            );
-            $this->data['email'] = array(
-                'name' => 'email',
-                'id' => 'email',
-                'type' => 'text',
-                'value' => $this->form_validation->set_value('email'),
-            );
-            $this->data['company'] = array(
-                'name' => 'company',
-                'id' => 'company',
-                'type' => 'text',
-                'value' => $this->form_validation->set_value('company'),
-            );
-            $this->data['phone'] = array(
-                'name' => 'phone',
-                'id' => 'phone',
-                'type' => 'text',
-                'value' => $this->form_validation->set_value('phone'),
-            );
-            $this->data['password'] = array(
-                'name' => 'password',
-                'id' => 'password',
-                'type' => 'password',
-                'value' => $this->form_validation->set_value('password'),
-            );
-            $this->data['password_confirm'] = array(
-                'name' => 'password_confirm',
-                'id' => 'password_confirm',
-                'type' => 'password',
-                'value' => $this->form_validation->set_value('password_confirm'),
+                'value' => $this->form_validation->set_value('group_id'),
             );
 
-            $this->load->view('users/create_user', $this->data);
+            $this->load->view('questions/create_question', $this->data);
         }
     }
 

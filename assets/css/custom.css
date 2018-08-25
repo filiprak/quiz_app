@@ -1,6 +1,6 @@
 .menu .logo {
   width: 50px;
-  margin-right: 10px;
+  margin-right: 20px;
 }
 .main.menu {
   width: 200px !important;
@@ -20,4 +20,13 @@
 }
 body.login-body {
   background-color: #ebebeb;
+}
+
+/*debug*/
+code > span{
+  font-size: 12px;
+  background-color: white;
+  padding-left: 250px;
+  display: block;
+  border: 1px solid red;
 }

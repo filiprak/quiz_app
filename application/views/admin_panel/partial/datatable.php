@@ -31,6 +31,7 @@ class DataTable
         $this->data = $data;
         $this->data_length = count($data);
         $this->data_width = count($options['header']['data']);
+        $this->search = is_array($options['search']) ? $options['search'] : false;
 
         $this->colspan = is_numeric($options['colspan']) ? $options['colspan'] : $this->data_width;
         if ($this->row_has_buttons) $this->colspan += 1;
@@ -42,7 +43,8 @@ class DataTable
 
         $data = is_array($data) || is_object($data) ? $data : array();
         foreach ($this->header['data'] as $key => $opts) {
-            $cell_data = isset($data->$key) ? $data->$key : '';
+            $cell_data = (is_object($data) ? $data->$key : $data[$key]);
+            $cell_data = isset($cell_data) ? $cell_data : '';
             $type = isset($opts['type']) ? $opts['type'] : false;
             if ($type == 'utf-8') {
                 $cell_data = htmlspecialchars($cell_data, ENT_QUOTES, 'UTF-8');
@@ -51,8 +53,7 @@ class DataTable
                 if (is_string($cell_data)) $cell_data = date($format, strtotime($cell_data));
                 else if (is_numeric($cell_data)) $cell_data = date($format, $cell_data);
                 else $cell_data = '';
-            }
-            else if ($type == 'number') {
+            } else if ($type == 'number') {
                 $format = is_array($opts['format']) ? $opts['format'] : array();
                 $decimals = is_numeric($format['decimals']) ? $format['decimals'] : 0;
                 $cell_data = number_format($cell_data, $decimals);
@@ -61,14 +62,18 @@ class DataTable
                 $icons = is_array($format['icons']) ? $format['icons'] : false;
                 $strings = is_array($format['strings']) ? $format['strings'] : false;
                 if ($icons) {
-                    $cell_data = $cell_data ? '<i class="icon ' . $icons[0] .'">' .
-                        htmlspecialchars($strings[0], ENT_QUOTES, 'UTF-8') .'</i></div>' :
-                        '<i class="icon ' . $icons[1] .'">' . htmlspecialchars($strings[1], ENT_QUOTES, 'UTF-8') .'</i>';
+                    $cell_data = $cell_data ? '<i class="icon ' . $icons[0] . '">' .
+                        htmlspecialchars($strings[0], ENT_QUOTES, 'UTF-8') . '</i></div>' :
+                        '<i class="icon ' . $icons[1] . '">' . htmlspecialchars($strings[1], ENT_QUOTES, 'UTF-8') . '</i>';
                 } else {
                     $cell_data = htmlspecialchars($cell_data ? $strings[0] : $strings[1], ENT_QUOTES, 'UTF-8');
                 }
             }
-            $html_output .= '<td>' . $cell_data . '</td>';
+            if ($opts['wrap_label'] === true) {
+                $html_output .= '<td><div class="ui ' . $opts['label_design'] . ' label" >' . $cell_data . '</div></td>';
+            } else {
+                $html_output .= '<td>' . $cell_data . '</td>';
+            }
         }
 
         if (is_array($options['buttons'])) {
@@ -130,11 +135,24 @@ class DataTable
 
         return '<tfoot>
                 <tr><th colspan="' . $this->colspan . '">
-                        
-                        ' . $this->render_pagination($this->pagination) . '
-                        <div class="ui left floated">' . $html_btns . '</div>
-                    </th>
-                </tr></tfoot>';
+                <div class="ui equal width column stackable vertically divided grid">
+                        ' . ($this->search ? '<div class="left floated column">
+                                        <form class="left aligned" action="" method="GET">
+                                            <div class="ui action input">
+                                                <input name="' . $this->search['param_name'] . '" type="text" placeholder="Search..." value="' . $this->search['value'] . '">
+                                                <button type="submit" class="ui button icon"><i class="search icon"></i></button>
+                                            </div>
+                                        </form>
+                                        <script>console.log(document)</script>
+                                        </div>' : '') . '
+                        <div class="right floated column">' . $this->render_pagination($this->pagination) . '</div>
+                </div>
+                <div class="ui divider"></div>
+                <div class="ui equal width column stackable vertically divided grid">
+                        <div class="left floated column">' . $html_btns . '</div>
+                </div>
+                </th>
+            </tr></tfoot>';
     }
 
     private function render_pagination($options = array())
@@ -149,17 +167,21 @@ class DataTable
         if (is_array($options) && count($options) > 0) {
             $islast = $page >= $total_pages;
             $isfirst = $page == 1;
-            $item1 = $page - 2 > 0 ? '<a href="' . $href_base . ($page - 2) . '" class="item">' . ($page - 2) . '</a>' : '';
-            $item2 = $page - 1 > 0 ? '<a href="' . $href_base . ($page - 1) . '" class="item">' . ($page - 1) . '</a>' : '';
+
+            $query_str = '&' . ($this->search['value'] ? $this->search['param_name'] . '=' . $this->search['value'] : '');
+
+            $item1 = $page - 2 > 0 ? '<a href="' . $href_base . ($page - 2) . $query_str . '" class="item">' . ($page - 2) . '</a>' : '';
+            $item2 = $page - 1 > 0 ? '<a href="' . $href_base . ($page - 1) . $query_str . '" class="item">' . ($page - 1) . '</a>' : '';
             $item3 = '<a class="item active">' . $page . '</a>';
-            $item4 = $page + 1 <= $total_pages ? '<a href="' . $href_base . ($page + 1) . '" class="item">' . ($page + 1) . '</a>' : '';
-            $item5 = $page + 2 <= $total_pages ? '<a href="' . $href_base . ($page + 2) . '" class="item">' . ($page + 2) . '</a>' : '';
+            $item4 = $page + 1 <= $total_pages ? '<a href="' . $href_base . ($page + 1) . $query_str . '" class="item">' . ($page + 1) . '</a>' : '';
+            $item5 = $page + 2 <= $total_pages ? '<a href="' . $href_base . ($page + 2) . $query_str . '" class="item">' . ($page + 2) . '</a>' : '';
+
             return '<div class="ui right floated small pagination menu">
-                        <a ' . ($isfirst ? '' : 'href="' . $href_base . 1 . '"') . ' class="icon item ' . ($isfirst ? 'disabled' : '') . '">
+                        <a ' . ($isfirst ? '' : 'href="' . $href_base . 1 . $query_str . '"') . ' class="icon item ' . ($isfirst ? 'disabled' : '') . '">
                             <i class="left chevron icon"></i>
                         </a>
                         ' . $item1 . $item2 . $item3 . $item4 . $item5 . '
-                        <a ' . ($islast ? '' : 'href="' . $href_base . $total_pages . '"') . ' class="icon item ' . ($islast ? 'disabled' : '') . '">
+                        <a ' . ($islast ? '' : 'href="' . $href_base . $total_pages . $query_str . '"') . ' class="icon item ' . ($islast ? 'disabled' : '') . '">
                             <i class="right chevron icon"></i>
                         </a>
                         <div class="red item">Total rows: ' . number_format($total, 0) . '</div>

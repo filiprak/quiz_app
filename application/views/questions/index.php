@@ -9,22 +9,18 @@
     </div>
 <?php } ?>
 
-<?php $usersdt = new DataTable($users, array(
+<?php $questionsdt = new DataTable($questions, array(
     'header' => array(
         'data' => array(
             'id' => 'ID',
-            'first_name' => array(
-                'title' => 'First Name',
+            'question' => array(
+                'title' => 'Question',
                 'type' => 'utf-8'),
-            'last_name' => array(
-                'title' => 'Last Name',
-                'type' => 'utf-8'),
-            'email' => 'E-mail',
-            'is_admin' => array(
-                'title' => 'Is Admin',
-                'type' => 'boolean',
-                'format' => array('icons' => array('green checkmark'))),
-
+            'group_id' => array(
+                'title' => 'Group',
+                'type' => 'utf-8',
+                'wrap_label' => true,
+                'label_design' => 'orange circular'),
         )
     ),
     'row' => array(
@@ -39,12 +35,12 @@
     ),
     'footer' => array(
         'buttons' => array(
-            array('icon' => 'plus', 'design' => 'small green', 'label' => 'Create User', 'href' => base_url() . 'index.php/users/create_user'),
+            array('icon' => 'plus', 'design' => 'small green', 'label' => 'Create Question', 'href' => base_url() . 'index.php/questions/create_question')
         )
     ),
     'pagination' => $pagination,
-    'search' => $search_users
+    'search' => $search_question
 ));
-echo $usersdt->render();?>
+echo $questionsdt->render(); ?>
 
 <?php include 'application/views/admin_panel/partial/footer.php'; ?>

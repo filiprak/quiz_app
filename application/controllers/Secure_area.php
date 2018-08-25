@@ -19,6 +19,7 @@ class Secure_area extends CI_Controller {
         $this->session->set_userdata('fullname', $logged_user->first_name . ' ' . $logged_user->last_name);
         $this->session->set_userdata('first_name', $logged_user->first_name);
         $this->session->set_userdata('last_name', $logged_user->last_name);
+        $this->session->set_userdata('is_admin', (bool)$this->is_admin());
     }
 
     public function is_admin() {
