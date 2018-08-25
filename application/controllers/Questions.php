@@ -51,29 +51,55 @@ class Questions extends Admin_panel
     {
         if (!parent::is_admin()) {
             $this->session->set_flashdata('message', 'You have to be an admin to perform this action');
-            redirect('users', 'refresh');
+            redirect('questions', 'refresh');
         }
 
         $this->data['page_title'] = 'Create Question';
 
         // validate form input
+        $answer_idxs = array(1,2,3,4);
+
         $this->form_validation->set_rules('question', 'question text', 'trim|required|max_length[2048]');
         $this->form_validation->set_rules('group_id', 'group', 'trim|required|max_length[128]');
+        foreach ($answer_idxs as $i) {
+            $this->form_validation->set_rules('answer' . $i, 'answer 1 text', 'trim');
+            $this->form_validation->set_rules('answer' . $i . '_score_a', 'answer ' . $i . ' score A', 'trim|is_natural');
+            $this->form_validation->set_rules('answer' . $i . '_score_i', 'answer ' . $i . ' score I', 'trim|is_natural');
+            $this->form_validation->set_rules('answer' . $i . '_score_c', 'answer ' . $i . ' score C', 'trim|is_natural');
+            $this->form_validation->set_rules('answer' . $i . '_score_p', 'answer ' . $i . ' score P', 'trim|is_natural');
+            $this->form_validation->set_rules('answer' . $i . '_next_group', 'answer ' . $i . ' next group', 'trim|max_length[128]');
+        }
 
         if ($this->form_validation->run() === TRUE) {
             $question_data = array(
                 'question' => $this->input->post('question'),
                 'group_id' => $this->input->post('group_id'),
             );
+            $answers_data = array();
+            foreach ($answer_idxs as $i) {
+                $answer = $this->input->post('answer' . $i);
+                $next_group = $this->input->post('answer' . $i . '_next_group');
+                if (is_string($answer) && strlen($answer) && is_string($next_group) && strlen($next_group) > 0) {
+                    $a_data = array();
+                    $a_data['answer'] = $answer;
+                    $a_data['score_A'] = $this->input->post('answer' . $i . '_score_a');
+                    $a_data['score_I'] = $this->input->post('answer' . $i . '_score_i');
+                    $a_data['score_C'] = $this->input->post('answer' . $i . '_score_c');
+                    $a_data['score_P'] = $this->input->post('answer' . $i . '_score_p');
+                    $a_data['next_question_group_id'] = $next_group;
+                    $answers_data[$i] = $a_data;
+                } else $answers_data[$i] = false;
+            }
         }
-        if ($this->form_validation->run() === TRUE && $this->questions_model->create($question_data)) {
+        if ($this->form_validation->run() === TRUE && $this->questions_model->create_with_answers($question_data, $answers_data)) {
             // redirect them back to the admin page
             $this->session->set_flashdata('message', 'New question was created successfully !');
             redirect("questions/index", 'refresh');
         } else {
             // display the create form
             // set the flash data error message if there is one
-            $this->data['message'] = (validation_errors() ? validation_errors() : $this->session->flashdata('message'));
+            $this->data['message'] = (validation_errors() ? validation_errors() : $this->session->flashdata('message',
+                'Error while creating question'));
 
             $this->data['question'] = array(
                 'name' => 'question',
@@ -87,159 +113,192 @@ class Questions extends Admin_panel
                 'type' => 'text',
                 'value' => $this->form_validation->set_value('group_id'),
             );
+            foreach ($answer_idxs as $i) {
+                $this->data['answer' . $i] = array(
+                    'name' => 'answer' . $i,
+                    'id' => 'answer' . $i,
+                    'type' => 'text',
+                    'value' => $this->form_validation->set_value('answer' . $i),
+                );
+                $this->data['answer' . $i . '_score_a'] = array(
+                    'name' => 'answer' . $i . '_score_a',
+                    'id' => 'answer' . $i . '_score_a',
+                    'type' => 'number',
+                    'value' => $this->form_validation->set_value('answer' . $i . '_score_a'),
+                );
+                $this->data['answer' . $i . '_score_i'] = array(
+                    'name' => 'answer' . $i . '_score_i',
+                    'id' => 'answer' . $i . '_score_i',
+                    'type' => 'number',
+                    'value' => $this->form_validation->set_value('answer' . $i . '_score_i'),
+                );
+                $this->data['answer' . $i . '_score_c'] = array(
+                    'name' => 'answer' . $i . '_score_c',
+                    'id' => 'answer' . $i . '_score_c',
+                    'type' => 'number',
+                    'value' => $this->form_validation->set_value('answer' . $i . '_score_c'),
+                );
+                $this->data['answer' . $i . '_score_p'] = array(
+                    'name' => 'answer' . $i . '_score_p',
+                    'id' => 'answer' . $i . '_score_p',
+                    'type' => 'number',
+                    'value' => $this->form_validation->set_value('answer' . $i . '_score_p'),
+                );
+                $this->data['answer' . $i . '_next_group'] = array(
+                    'name' => 'answer' . $i . '_next_group',
+                    'id' => 'answer' . $i . '_next_group',
+                    'type' => 'text',
+                    'value' => $this->form_validation->set_value('answer' . $i . '_next_group'),
+                );
+            }
 
             $this->load->view('questions/create_question', $this->data);
         }
     }
 
-    public function edit_user($user_id)
+    public function edit_question($question_id)
     {
-        if (!parent::is_admin() || !is_numeric($user_id)) {
+        if (!parent::is_admin()) {
             $this->session->set_flashdata('message', 'You have to be an admin to perform this action');
-            redirect('users', 'refresh');
+            redirect('questions', 'refresh');
+        }
+        if (!is_numeric($question_id)) {
+            $this->session->set_flashdata('message', 'Bad parameters error');
+            redirect('questions', 'refresh');
         }
 
-        $user_id = (int)$user_id;
+        $this->data['page_title'] = 'Edit Question';
 
-        $this->data = array(
-            'page_title' => 'Edit User'
-        );
+        // fetch question data
+        $question_answers = $this->questions_model->get_with_answers($question_id);
+        $question = $question_answers['question'];
+        $answers = $question_answers['answers'];
 
-        if (!$this->ion_auth->logged_in() || (!$this->ion_auth->is_admin() && !($this->ion_auth->user()->row()->id == $user_id))) {
-            redirect('auth', 'refresh');
-        }
-
-        $user = $this->ion_auth->user($user_id)->row();
-        $groups = $this->ion_auth->groups()->result_array();
-        $currentGroups = $this->ion_auth->get_users_groups($user_id)->result();
+        $this->data['question_id'] = $question['id'];
 
         // validate form input
-        $this->form_validation->set_rules('first_name', $this->lang->line('edit_user_validation_fname_label'), 'trim|required');
-        $this->form_validation->set_rules('last_name', $this->lang->line('edit_user_validation_lname_label'), 'trim|required');
-        $this->form_validation->set_rules('phone', $this->lang->line('edit_user_validation_phone_label'), 'trim');
-        $this->form_validation->set_rules('company', $this->lang->line('edit_user_validation_company_label'), 'trim');
+        $answer_idxs = array(1,2,3,4);
+
+        $this->form_validation->set_rules('question', 'question text', 'trim|required|max_length[2048]');
+        $this->form_validation->set_rules('group_id', 'group', 'trim|required|max_length[128]');
+        foreach ($answer_idxs as $i) {
+            $this->form_validation->set_rules('answer' . $i, 'answer 1 text', 'trim');
+            $this->form_validation->set_rules('answer' . $i . '_score_a', 'answer ' . $i . ' score A', 'trim|is_natural');
+            $this->form_validation->set_rules('answer' . $i . '_score_i', 'answer ' . $i . ' score I', 'trim|is_natural');
+            $this->form_validation->set_rules('answer' . $i . '_score_c', 'answer ' . $i . ' score C', 'trim|is_natural');
+            $this->form_validation->set_rules('answer' . $i . '_score_p', 'answer ' . $i . ' score P', 'trim|is_natural');
+            $this->form_validation->set_rules('answer' . $i . '_next_group', 'answer ' . $i . ' next group', 'trim|max_length[128]');
+        }
 
         if (isset($_POST) && !empty($_POST)) {
 
-            // update the password if it was posted
-            if ($this->input->post('password')) {
-                $this->form_validation->set_rules('password', $this->lang->line('edit_user_validation_password_label'), 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|max_length[' . $this->config->item('max_password_length', 'ion_auth') . ']|matches[password_confirm]');
-                $this->form_validation->set_rules('password_confirm', $this->lang->line('edit_user_validation_password_confirm_label'), 'required');
-            }
-
             if ($this->form_validation->run() === TRUE) {
-                $this->data = array(
-                    'first_name' => $this->input->post('first_name'),
-                    'last_name' => $this->input->post('last_name'),
-                    'company' => $this->input->post('company'),
-                    'phone' => $this->input->post('phone'),
-                );
+                $question['question'] = $this->input->post('question');
+                $question['group_id'] = $this->input->post('group_id');
 
-                // update the password if it was posted
-                if ($this->input->post('password')) {
-                    $this->data['password'] = $this->input->post('password');
+                foreach ($answer_idxs as $i) {
+                    $answers[$i]['answer'] = $this->input->post('answer' . $i);
+                    $answers[$i]['next_question_group_id'] = $this->input->post('answer' . $i . '_next_group');
+                    $answers[$i]['score_A'] = $this->input->post('answer' . $i . '_score_a');
+                    $answers[$i]['score_I'] = $this->input->post('answer' . $i . '_score_i');
+                    $answers[$i]['score_C'] = $this->input->post('answer' . $i . '_score_c');
+                    $answers[$i]['score_P'] = $this->input->post('answer' . $i . '_score_p');
                 }
-
-                // Only allow updating groups if user is admin
-                if ($this->ion_auth->is_admin()) {
-                    // Update the groups user belongs to
-                    $groupData = $this->input->post('groups');
-
-                    if (isset($groupData) && !empty($groupData)) {
-
-                        $this->ion_auth->remove_from_group('', $user_id);
-
-                        foreach ($groupData as $grp) {
-                            $this->ion_auth->add_to_group($grp, $user_id);
-                        }
-
-                    }
-                }
-
-                // check to see if we are updating the user
-                if ($this->ion_auth->update($user->id, $this->data)) {
-                    // redirect them back to the admin page if admin, or to the base url if non admin
-                    $this->session->set_flashdata('message', $this->ion_auth->messages());
-                    redirect('users', 'refresh');
-
-                } else {
-                    // redirect them back to the admin page if admin, or to the base url if non admin
-                    $this->session->set_flashdata('message', $this->ion_auth->errors());
-                    redirect('users', 'refresh');
-                }
-
+            }
+            if ($this->form_validation->run() === TRUE && $this->questions_model->update_with_answers($question, $answers)) {
+                // redirect them back to the admin page
+                $this->session->set_flashdata('message', 'Question was updated successfully !');
+                redirect("questions/index", 'refresh');
             }
         }
 
-        // display the edit user form
+        // display the create form
         // set the flash data error message if there is one
-        $this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
+        $this->data['message'] = (validation_errors() ? validation_errors() : $this->session->flashdata('message',
+            'Error while updating question'));
 
-        // pass the user to the view
-        $this->data['user'] = $user;
-        $this->data['groups'] = $groups;
-        $this->data['currentGroups'] = $currentGroups;
+        $this->data['question'] = array(
+            'name' => 'question',
+            'id' => 'question',
+            'type' => 'text',
+            'value' => $this->form_validation->set_value('question', $question['question']),
+        );
+        $this->data['group_id'] = array(
+            'name' => 'group_id',
+            'id' => 'group_id',
+            'type' => 'text',
+            'value' => $this->form_validation->set_value('group_id', $question['group_id']),
+        );
+        foreach ($answer_idxs as $i) {
+            $this->data['answer' . $i] = array(
+                'name' => 'answer' . $i,
+                'id' => 'answer' . $i,
+                'type' => 'text',
+                'value' => $this->form_validation->set_value('answer' . $i, $answers[$i]['answer']),
+            );
+            $this->data['answer' . $i . '_score_a'] = array(
+                'name' => 'answer' . $i . '_score_a',
+                'id' => 'answer' . $i . '_score_a',
+                'type' => 'number',
+                'value' => $this->form_validation->set_value('answer' . $i . '_score_a', $answers[$i]['score_A']),
+            );
+            $this->data['answer' . $i . '_score_i'] = array(
+                'name' => 'answer' . $i . '_score_i',
+                'id' => 'answer' . $i . '_score_i',
+                'type' => 'number',
+                'value' => $this->form_validation->set_value('answer' . $i . '_score_i', $answers[$i]['score_I']),
+            );
+            $this->data['answer' . $i . '_score_c'] = array(
+                'name' => 'answer' . $i . '_score_c',
+                'id' => 'answer' . $i . '_score_c',
+                'type' => 'number',
+                'value' => $this->form_validation->set_value('answer' . $i . '_score_c', $answers[$i]['score_C']),
+            );
+            $this->data['answer' . $i . '_score_p'] = array(
+                'name' => 'answer' . $i . '_score_p',
+                'id' => 'answer' . $i . '_score_p',
+                'type' => 'number',
+                'value' => $this->form_validation->set_value('answer' . $i . '_score_p', $answers[$i]['score_P']),
+            );
+            $this->data['answer' . $i . '_next_group'] = array(
+                'name' => 'answer' . $i . '_next_group',
+                'id' => 'answer' . $i . '_next_group',
+                'type' => 'text',
+                'value' => $this->form_validation->set_value('answer' . $i . '_next_group', $answers[$i]['next_question_group_id']),
+            );
 
-        $this->data['first_name'] = array(
-            'name' => 'first_name',
-            'id' => 'first_name',
-            'type' => 'text',
-            'value' => $this->form_validation->set_value('first_name', $user->first_name),
-        );
-        $this->data['last_name'] = array(
-            'name' => 'last_name',
-            'id' => 'last_name',
-            'type' => 'text',
-            'value' => $this->form_validation->set_value('last_name', $user->last_name),
-        );
-        $this->data['company'] = array(
-            'name' => 'company',
-            'id' => 'company',
-            'type' => 'text',
-            'value' => $this->form_validation->set_value('company', $user->company),
-        );
-        $this->data['phone'] = array(
-            'name' => 'phone',
-            'id' => 'phone',
-            'type' => 'text',
-            'value' => $this->form_validation->set_value('phone', $user->phone),
-        );
-        $this->data['password'] = array(
-            'name' => 'password',
-            'id' => 'password',
-            'type' => 'password'
-        );
-        $this->data['password_confirm'] = array(
-            'name' => 'password_confirm',
-            'id' => 'password_confirm',
-            'type' => 'password'
-        );
+        }
 
-        $this->load->view('users/edit_user', $this->data);
+        $this->load->view('questions/edit_question', $this->data);
     }
 
-    public function remove_user($user_id = null)
+
+    public function remove_question($question_id = null)
     {
-        if (!parent::is_admin() || !is_numeric($user_id)) {
+        if (!parent::is_admin()) {
             $this->session->set_flashdata('message', 'You have to be an admin to perform this action');
-            redirect('users', 'refresh');
+            redirect('questions', 'refresh');
+        }
+        if (!is_numeric($question_id)) {
+            $this->session->set_flashdata('message', 'Bad parameters error');
+            redirect('questions', 'refresh');
         }
 
-        if ($this->input->post('user_id')) {
-            if (parent::is_admin() && $user_id == $this->input->post('user_id') && $user_id != 1) {
-                $this->ion_auth->delete_user($user_id);
-                $this->session->set_flashdata('message', 'User was removed successfully');
+        if ($this->input->post('question_id')) {
+            if (parent::is_admin() && $question_id == $this->input->post('question_id')) {
+                $this->questions_model->remove_with_answers($question_id);
+                $this->session->set_flashdata('message', 'Question was removed successfully');
             } else {
-                $this->session->set_flashdata('message', 'Error when removing user');
+                $this->session->set_flashdata('message', 'Error when removing question');
             }
-            redirect('users', 'refresh');
+            redirect('questions', 'refresh');
         }
 
         $this->data = array(
-            'page_title' => 'Remove User',
-            'user' => $this->ion_auth->user((int)$user_id)->row()
+            'page_title' => 'Remove Question',
+            'question' => $this->questions_model->get($question_id)
         );
 
-        $this->load->view('users/remove_user', $this->data);
+        $this->load->view('questions/remove_question', $this->data);
     }
 }

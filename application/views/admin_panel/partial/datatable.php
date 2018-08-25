@@ -82,7 +82,8 @@ class DataTable
                 if (is_array($btn['href_append'])) {
                     $append = array();
                     foreach ($btn['href_append'] as $key) {
-                        if (isset($data->$key)) array_push($append, $data->$key);
+                        $append_val = is_array($data) ? $data[$key] : $data->$key;
+                        if (isset($append_val)) array_push($append, $append_val);
                     }
                     $btn['href'] .= '/' . implode('/', $append);
                 }
@@ -168,7 +169,7 @@ class DataTable
             $islast = $page >= $total_pages;
             $isfirst = $page == 1;
 
-            $query_str = '&' . ($this->search['value'] ? $this->search['param_name'] . '=' . $this->search['value'] : '');
+            $query_str = ($this->search['value'] ? '&' . $this->search['param_name'] . '=' . $this->search['value'] : '');
 
             $item1 = $page - 2 > 0 ? '<a href="' . $href_base . ($page - 2) . $query_str . '" class="item">' . ($page - 2) . '</a>' : '';
             $item2 = $page - 1 > 0 ? '<a href="' . $href_base . ($page - 1) . $query_str . '" class="item">' . ($page - 1) . '</a>' : '';
@@ -184,7 +185,7 @@ class DataTable
                         <a ' . ($islast ? '' : 'href="' . $href_base . $total_pages . $query_str . '"') . ' class="icon item ' . ($islast ? 'disabled' : '') . '">
                             <i class="right chevron icon"></i>
                         </a>
-                        <div class="red item">Total rows: ' . number_format($total, 0) . '</div>
+                        <div class="item">total rows: ' . number_format($total, 0) . '</div>
                     </div>';
         }
         return '';

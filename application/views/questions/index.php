@@ -26,10 +26,10 @@
     'row' => array(
         'buttons' => array(
             array('icon' => 'edit', 'design' => 'small icon',
-                'href' => base_url() . 'index.php/users/edit_user',
+                'href' => base_url() . 'index.php/questions/edit_question',
                 'href_append' => array('id')),
             array('icon' => 'trash', 'design' => 'small icon',
-                'href' => base_url() . 'index.php/users/remove_user',
+                'href' => base_url() . 'index.php/questions/remove_question',
                 'href_append' => array('id')),
         )
     ),

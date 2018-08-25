@@ -8,76 +8,138 @@
     </div>
 <?php } ?>
 
-
 <div class="ui clearing segment">
-    <?php echo form_open(uri_string(), array('class' => 'ui form')); ?>
-
-    <h4 class="ui dividing header">Edit User Information</h4>
+    <?php echo form_open(uri_string(), array('class' => 'ui form'));?>
 
     <div class="required field">
-        <label>Name</label>
-        <div class="two fields">
+        <label>Question Text</label>
+        <?php echo form_textarea($question);?>
+    </div>
+    <div class="required field">
+        <label>Group</label>
+        <?php echo form_input($group_id);?>
+    </div>
+
+    <h4 class="ui dividing header">Answers</h4>
+
+    <div class="ui segment">
+        <div class="required field">
+            <label>Answer 1</label>
+            <?php echo form_input($answer1);?>
+        </div>
+        <div class="five fields">
             <div class="field">
-                <?php echo form_input($first_name, '', 'placeholder="First Name"'); ?>
+                <label>Score A</label>
+                <?php echo form_input($answer1_score_a, '', 'placeholder="Score A"');?>
             </div>
             <div class="field">
-                <?php echo form_input($last_name, '', 'placeholder="Last Name"'); ?>
+                <label>Score I</label>
+                <?php echo form_input($answer1_score_i, '', 'placeholder="Score I"');?>
+            </div>
+            <div class="field">
+                <label>Score C</label>
+                <?php echo form_input($answer1_score_c, '', 'placeholder="Score C"');?>
+            </div>
+            <div class="field">
+                <label>Score P</label>
+                <?php echo form_input($answer1_score_p, '', 'placeholder="Score P"');?>
+            </div>
+            <div class="twelve wide required field">
+                <label>Next Question Group</label>
+                <?php echo form_input($answer1_next_group, '', 'placeholder="Next Question Group"');?>
+            </div>
+        </div>
+    </div>
+    <div class="ui segment">
+        <div class="required field">
+            <label>Answer 2</label>
+            <?php echo form_input($answer2);?>
+        </div>
+        <div class="five fields">
+            <div class="field">
+                <label>Score A</label>
+                <?php echo form_input($answer2_score_a, '', 'placeholder="Score A"');?>
+            </div>
+            <div class="field">
+                <label>Score I</label>
+                <?php echo form_input($answer2_score_i, '', 'placeholder="Score I"');?>
+            </div>
+            <div class="field">
+                <label>Score C</label>
+                <?php echo form_input($answer2_score_c, '', 'placeholder="Score C"');?>
+            </div>
+            <div class="field">
+                <label>Score P</label>
+                <?php echo form_input($answer2_score_p, '', 'placeholder="Score P"');?>
+            </div>
+            <div class="twelve wide required field">
+                <label>Next Question Group</label>
+                <?php echo form_input($answer2_next_group, '', 'placeholder="Next Question Group"');?>
+            </div>
+        </div>
+    </div>
+    <div class="ui segment">
+        <div class="required field">
+            <label>Answer 3</label>
+            <?php echo form_input($answer3);?>
+        </div>
+        <div class="five fields">
+            <div class="field">
+                <label>Score A</label>
+                <?php echo form_input($answer3_score_a, '', 'placeholder="Score A"');?>
+            </div>
+            <div class="field">
+                <label>Score I</label>
+                <?php echo form_input($answer3_score_i, '', 'placeholder="Score I"');?>
+            </div>
+            <div class="field">
+                <label>Score C</label>
+                <?php echo form_input($answer3_score_c, '', 'placeholder="Score C"');?>
+            </div>
+            <div class="field">
+                <label>Score P</label>
+                <?php echo form_input($answer3_score_p, '', 'placeholder="Score P"');?>
+            </div>
+            <div class="twelve wide required field">
+                <label>Next Question Group</label>
+                <?php echo form_input($answer3_next_group, '', 'placeholder="Next Question Group"');?>
+            </div>
+        </div>
+    </div>
+    <div class="ui segment">
+        <div class="required field">
+            <label>Answer 4</label>
+            <?php echo form_input($answer4);?>
+        </div>
+        <div class="five fields">
+            <div class="field">
+                <label>Score A</label>
+                <?php echo form_input($answer4_score_a, '', 'placeholder="Score A"');?>
+            </div>
+            <div class="field">
+                <label>Score I</label>
+                <?php echo form_input($answer4_score_i, '', 'placeholder="Score I"');?>
+            </div>
+            <div class="field">
+                <label>Score C</label>
+                <?php echo form_input($answer4_score_c, '', 'placeholder="Score C"');?>
+            </div>
+            <div class="field">
+                <label>Score P</label>
+                <?php echo form_input($answer4_score_p, '', 'placeholder="Score P"');?>
+            </div>
+            <div class="twelve wide required field">
+                <label>Next Question Group</label>
+                <?php echo form_input($answer4_next_group, '', 'placeholder="Next Question Group"');?>
             </div>
         </div>
     </div>
 
     <div class="field">
-        <?php echo lang('create_user_company_label', 'company'); ?>
-        <?php echo form_input($company); ?>
-    </div>
-    <div class="field">
-        <?php echo lang('create_user_phone_label', 'phone'); ?>
-        <?php echo form_input($phone); ?>
-    </div>
-    <div class="field">
-        <?php echo lang('create_user_password_label', 'password'); ?>
-        <?php echo form_input($password); ?>
-    </div>
-    <div class="field">
-        <?php echo lang('create_user_password_confirm_label', 'password_confirm'); ?>
-        <?php echo form_input($password_confirm); ?>
+        <?php echo form_submit('submit', 'Save Question',
+            'class="ui right floated blue submit button"');?>
+        <a class="ui right floated button" href="<?php echo base_url() . 'index.php/questions' ?>">Back</a>
     </div>
 
-    <?php if ($this->ion_auth->is_admin()): ?>
-
-    <h4 class="ui dividing header"><?php echo lang('edit_user_groups_heading'); ?></h4>
-    <div class="grouped fields">
-        <?php foreach ($groups as $group): ?>
-        <div class="field">
-            <div class="ui checkbox <?php echo $user->id == 1 ? 'disabled' : ''; ?>">
-                <?php
-                $gID = $group['id'];
-                $checked = null;
-                $item = null;
-                foreach ($currentGroups as $grp) {
-                    if ($gID == $grp->id) {
-                        $checked = ' checked="checked"';
-                        break;
-                    }
-                }
-                ?>
-                <input <?php echo $user->id == 1 ? 'disabled' : ''; ?> type="checkbox" name="groups[]" value="<?php echo $group['id']; ?>"<?php echo $checked; ?>>
-                <label><?php echo htmlspecialchars($group['name'], ENT_QUOTES, 'UTF-8'); ?></label>
-            </div>
-        </div>
-        <?php endforeach ?>
-    </div>
-
-    <?php endif ?>
-
-    <?php echo form_hidden('id', $user->id); ?>
-    <?php echo form_hidden($csrf); ?>
-
-    <div class="field">
-        <?php echo form_submit('submit', lang('edit_user_submit_btn'),
-            'class="ui right floated blue submit button"'); ?>
-        <a class="ui right floated button" href="<?php echo base_url() . 'index.php/users' ?>">Back</a>
-    </div>
-
-    <?php echo form_close(); ?>
+    <?php echo form_close();?>
 </div>

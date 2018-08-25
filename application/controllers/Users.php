@@ -168,8 +168,12 @@ class Users extends Admin_panel
 
     public function edit_user($user_id)
     {
-        if (!parent::is_admin() || !is_numeric($user_id)) {
+        if (!parent::is_admin()) {
             $this->session->set_flashdata('message', 'You have to be an admin to perform this action');
+            redirect('users', 'refresh');
+        }
+        if (!is_numeric($user_id)) {
+            $this->session->set_flashdata('message', 'Bad parameters error');
             redirect('users', 'refresh');
         }
 
@@ -294,8 +298,12 @@ class Users extends Admin_panel
 
     public function remove_user($user_id = null)
     {
-        if (!parent::is_admin() || !is_numeric($user_id)) {
+        if (!parent::is_admin()) {
             $this->session->set_flashdata('message', 'You have to be an admin to perform this action');
+            redirect('users', 'refresh');
+        }
+        if (!is_numeric($user_id)) {
+            $this->session->set_flashdata('message', 'Bad parameters error');
             redirect('users', 'refresh');
         }
 
