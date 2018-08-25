@@ -1,32 +1,40 @@
-<div class="ui visible left sidebar vertical inverted main menu">
-    <div class="ui container">
-        <div class="item">
-            <a href="<?php echo base_url() . 'index.php/admin_panel/index'; ?>" class="ui logo icon image ">
-                <img src="<?php echo base_url() . 'assets/img/logo.png'; ?>">
-            </a>
-            <span><b>Quiz App</b></span>
-        </div>
+<?php
 
-        <div class="item"><i class="icon user"></i>
-            <?php echo htmlspecialchars($logged_user->first_name . ' ' . $logged_user->last_name); ?>
-        </div>
+$menu = array(
+    'admin_panel' => array('href' => 'index.php/admin_panel', 'label' => 'Panel'),
+    'users' => array('href' => 'index.php/users', 'label' => 'Users'),
+    'questions' => array('href' => 'index.php/questions', 'label' => 'Questions'),
+    'answers' => array('href' => 'index.php/answers', 'label' => 'Answers'),
+    'suggestions' => array('href' => 'index.php/suggestions', 'label' => 'Suggestions'),
+    'tags' => array('href' => 'index.php/tags', 'label' => 'Tags'),
+    'scores' => array('href' => 'index.php/scores', 'label' => 'Scores'),
+);
 
-        <div class="item borderless">
+?>
 
-        </div>
 
-        <a class="item" href="<?php echo base_url() . 'index.php/users'; ?>">Users</a>
-        <a class="item" href="<?php echo base_url() . 'index.php/questions'; ?>">Questions</a>
-        <a class="item" href="<?php echo base_url() . 'index.php/users'; ?>">Answers</a>
-        <a class="item" href="<?php echo base_url() . 'index.php/suggestions'; ?>">Suggestions</a>
-        <a class="item" href="<?php echo base_url() . 'index.php/tags'; ?>">Tags</a>
-        <a class="item" href="<?php echo base_url() . 'index.php/scores'; ?>">Scores</a>
-
-        <div class="item">
-
-        </div>
-
-        <a class="item borderless" href="<?php echo base_url() . 'index.php/auth/logout'; ?>"><i class="icon sign-out"></i><b>Logout</b></a>
-
+<div class="ui visible left sidebar vertical inverted black main menu">
+    <div class="item">
+        <a href="<?php echo base_url() . 'index.php/admin_panel/index'; ?>" class="ui logo icon image ">
+            <img src="<?php echo base_url() . 'assets/img/logo.png'; ?>">
+        </a>
+        <span><b>Quiz App</b></span>
     </div>
+
+    <div class="item borderless">
+        <a class="float-right" href="<?php echo base_url() . 'index.php/users/edit_user/' . $_SESSION['user_id']; ?>"><i class="icon user"></i></a>
+        <b><?php echo htmlspecialchars($_SESSION['fullname']); ?></b>
+    </div>
+
+    <div class="item"></div>
+
+    <?php foreach ($menu as $key => $opts) {
+        echo '<a class="item" href="' . base_url() . $opts['href'] . '">' . $opts['label'] . '</a>';
+    } ?>
+
+    <div class="item borderless"></div>
+
+    <a class="item borderless" href="<?php echo base_url() . 'index.php/auth/logout'; ?>"><i
+                class="icon sign-out"></i><b>Logout</b></a>
+
 </div>

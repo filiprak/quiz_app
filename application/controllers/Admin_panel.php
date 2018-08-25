@@ -9,7 +9,6 @@ class Admin_panel extends Secure_area {
 	{
         $this->data = array(
             'page_title' => 'Admin Panel',
-            'logged_user' => parent::logged_user(),
             'is_admin' => parent::is_admin(),
         );
 		$this->load->view('admin_panel/index', $this->data);

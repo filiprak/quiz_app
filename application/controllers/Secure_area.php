@@ -15,7 +15,10 @@ class Secure_area extends CI_Controller {
             redirect('auth/login', 'refresh');
         }
 
-        $this->data['logged_user'] = $this->logged_user();
+        $logged_user = $this->logged_user();
+        $this->session->set_userdata('fullname', $logged_user->first_name . ' ' . $logged_user->last_name);
+        $this->session->set_userdata('first_name', $logged_user->first_name);
+        $this->session->set_userdata('last_name', $logged_user->last_name);
     }
 
     public function is_admin() {
