@@ -10,9 +10,10 @@
 <?php } ?>
 
 <?php $questionsdt = new DataTable($questions, array(
+    'design' => 'blue fixed',
     'header' => array(
         'data' => array(
-            'id' => 'ID',
+            'id' => array('title' => 'ID', 'width' => '60px'),
             'question' => array(
                 'title' => 'Question',
                 'type' => 'utf-8'),
@@ -20,8 +21,10 @@
                 'title' => 'Group',
                 'type' => 'utf-8',
                 'wrap_label' => true,
-                'label_design' => 'orange circular'),
-        )
+                'label_design' => 'orange circular',
+                'width' => '15%'),
+        ),
+        'btn_col_width' => '100px'
     ),
     'row' => array(
         'buttons' => array(
@@ -39,7 +42,8 @@
         )
     ),
     'pagination' => $pagination,
-    'search' => $search_question
+    'search' => $search_question,
+    'JS_sortable' => true,
 ));
 echo $questionsdt->render(); ?>
 

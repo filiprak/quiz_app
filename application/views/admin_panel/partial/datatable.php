@@ -26,6 +26,7 @@ class DataTable
         $this->header = $options['header'];
         $this->row = $options['row'];
         $this->pagination = $options['pagination'];
+        $this->JS_sortable = $options['JS_sortable'] == true;
         $this->row_has_buttons = is_array($options['row']['buttons']);
         $this->footer = $options['footer'];
         $this->data = $data;
@@ -46,6 +47,9 @@ class DataTable
             $cell_data = (is_object($data) ? $data->$key : $data[$key]);
             $cell_data = isset($cell_data) ? $cell_data : '';
             $type = isset($opts['type']) ? $opts['type'] : false;
+
+            $sort_value = htmlspecialchars($cell_data);
+
             if ($type == 'utf-8') {
                 $cell_data = htmlspecialchars($cell_data, ENT_QUOTES, 'UTF-8');
             } else if ($type == 'date' || $type == 'datetime') {
@@ -53,6 +57,8 @@ class DataTable
                 if (is_string($cell_data)) $cell_data = date($format, strtotime($cell_data));
                 else if (is_numeric($cell_data)) $cell_data = date($format, $cell_data);
                 else $cell_data = '';
+                $sort_value = strtotime($cell_data);
+
             } else if ($type == 'number') {
                 $format = is_array($opts['format']) ? $opts['format'] : array();
                 $decimals = is_numeric($format['decimals']) ? $format['decimals'] : 0;
@@ -61,6 +67,9 @@ class DataTable
                 $format = is_array($opts['format']) ? $opts['format'] : array();
                 $icons = is_array($format['icons']) ? $format['icons'] : false;
                 $strings = is_array($format['strings']) ? $format['strings'] : false;
+
+                $sort_value = $cell_data ? 1 : 0;
+
                 if ($icons) {
                     $cell_data = $cell_data ? '<i class="icon ' . $icons[0] . '">' .
                         htmlspecialchars($strings[0], ENT_QUOTES, 'UTF-8') . '</i></div>' :
@@ -69,11 +78,10 @@ class DataTable
                     $cell_data = htmlspecialchars($cell_data ? $strings[0] : $strings[1], ENT_QUOTES, 'UTF-8');
                 }
             }
-            if ($opts['wrap_label'] === true) {
-                $html_output .= '<td><div class="ui ' . $opts['label_design'] . ' label" >' . $cell_data . '</div></td>';
-            } else {
-                $html_output .= '<td>' . $cell_data . '</td>';
-            }
+            if ($opts['wrap_label'] === true)
+                $cell_data = '<div class="ui ' . $opts['label_design'] . ' label" >' . $cell_data . '</div>';
+
+            $html_output .= '<td ' . ($this->JS_sortable ? 'sort-value="' . $sort_value . '"' : '') . '>' . $cell_data . '</td>';
         }
 
         if (is_array($options['buttons'])) {
@@ -106,16 +114,20 @@ class DataTable
         $data = is_array($options['data']) ? $options['data'] : array();
         foreach ($data as $key => $val) {
             if (is_array($val)) {
-                $html_output .= '<th>' . htmlspecialchars($val['title'], ENT_QUOTES, 'UTF-8') . '</th>';
+                $html_header = htmlspecialchars($val['title'], ENT_QUOTES, 'UTF-8');
             } elseif (is_string($val)) {
-                $html_output .= '<th>' . htmlspecialchars($val, ENT_QUOTES, 'UTF-8') . '</th>';
+                $html_header = htmlspecialchars($val, ENT_QUOTES, 'UTF-8');
             } else {
-                $html_output .= '<th></th>';
+                $html_header = '';
             }
+            $width = $val['width'];
+            $html_output .= '<th ' . ($width ? 'style="width: ' . $width . '"' : '') . '>' . $html_header . '</th>';
         }
 
         if ($this->row_has_buttons) {
-            $html_output .= '<th class="right aligned">' . $options['buttonsHeader'] . '</th>';
+            $btn_col_width = $options['btn_col_width'] ? $options['btn_col_width'] : false;
+            $html_output .= '<th ' . ($btn_col_width ? 'style="width: ' . $btn_col_width . '"' : '') . ' class="right aligned">'
+                . $options['buttons_header'] . '</th>';
         }
 
         return $html_output . '</tr></thead>';
@@ -194,7 +206,8 @@ class DataTable
     function render()
     {
         $design = $this->options['design'];
-        $html_output = '<table class="ui ' . $design . ' table">';
+        $id = uniqid();
+        $html_output = '<table id="' . $id . '" class="ui ' . $design . ' ' . ($this->JS_sortable ? 'sortable' : '') . ' table">';
 
         $html_output .= $this->render_header($this->header);
         $html_output .= '<tbody>';
@@ -209,7 +222,9 @@ class DataTable
         $html_output .= '</tbody>';
         $html_output .= $this->render_footer($this->footer);
 
-        return $html_output . '</table>';
+        $sorting_js = '<script>$("#' . $id . '").tablesort()</script>';
+
+        return $html_output . '</table>' . ($this->JS_sortable ? $sorting_js : '');
     }
 }
 

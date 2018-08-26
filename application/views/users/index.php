@@ -10,9 +10,10 @@
 <?php } ?>
 
 <?php $usersdt = new DataTable($users, array(
+    'design' => 'orange fixed',
     'header' => array(
         'data' => array(
-            'id' => 'ID',
+            'id' => array('title' => 'ID', 'width' => '60px'),
             'first_name' => array(
                 'title' => 'First Name',
                 'type' => 'utf-8'),
@@ -23,9 +24,11 @@
             'is_admin' => array(
                 'title' => 'Is Admin',
                 'type' => 'boolean',
-                'format' => array('icons' => array('green checkmark'))),
+                'format' => array('icons' => array('green checkmark')),
+                'width' => '100px'),
 
-        )
+        ),
+        'btn_col_width' => '100px'
     ),
     'row' => array(
         'buttons' => array(
@@ -43,7 +46,8 @@
         )
     ),
     'pagination' => $pagination,
-    'search' => $search_users
+    'search' => $search_users,
+    'JS_sortable' => true,
 ));
 echo $usersdt->render();?>
 
