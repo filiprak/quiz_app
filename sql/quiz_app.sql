@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Czas generowania: 26 Sie 2018, 00:53
+-- Czas generowania: 26 Sie 2018, 17:34
 -- Wersja serwera: 5.7.22-0ubuntu0.16.04.1
 -- Wersja PHP: 5.6.37-1+ubuntu16.04.1+deb.sury.org+1
 
@@ -135,7 +135,8 @@ INSERT INTO `qa_questions` (`id`, `question`, `group_id`) VALUES
 (21, 'wqeqwewqe', 'qweqweqwe'),
 (23, 'What color do you like ?', 'group2'),
 (25, 'dqwewqe', 'group_test'),
-(26, 'What color do you like ?', 'group2');
+(26, 'What color do you like ?', 'group2'),
+(27, 'How many years old are you ?', 'group9');
 
 -- --------------------------------------------------------
 
@@ -146,7 +147,7 @@ INSERT INTO `qa_questions` (`id`, `question`, `group_id`) VALUES
 CREATE TABLE `qa_rating` (
   `id` int(11) NOT NULL,
   `suggestion_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `score_id` int(11) NOT NULL,
   `rating` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -198,8 +199,16 @@ CREATE TABLE `qa_suggestions` (
   `score_I` int(16) NOT NULL,
   `score_C` int(16) NOT NULL,
   `score_P` int(16) NOT NULL,
-  `image` varchar(512) COLLATE utf8_unicode_ci NOT NULL
+  `image` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Zrzut danych tabeli `qa_suggestions`
+--
+
+INSERT INTO `qa_suggestions` (`id`, `name`, `description`, `score_A`, `score_I`, `score_C`, `score_P`, `image`) VALUES
+(1, 'Suggestion 1', 'This is suggestion description.', 22, 7, 5, 0, NULL),
+(36, 'test upload', 'file', 23, 34, 53, 4, '4c9116ae4018bb16c10cf410eb67c249.jpg');
 
 -- --------------------------------------------------------
 
@@ -248,7 +257,7 @@ CREATE TABLE `qa_users` (
 --
 
 INSERT INTO `qa_users` (`id`, `ip_address`, `username`, `password`, `salt`, `email`, `activation_code`, `forgotten_password_code`, `forgotten_password_time`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`) VALUES
-(1, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', 'admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1535191575, 1, 'Admin', 'istrator', 'ADMIN', '0'),
+(1, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', 'admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1535272846, 1, 'Admin', 'Istrator', 'ADMIN', '0'),
 (2, '::1', 'test@test.com', '$2y$08$IrlbOvTg5A7inOIskAKqK.HpqlgDBVqs/Gs6dTG1Xn0M4tos3SY1.', NULL, 'test@test.com', NULL, NULL, NULL, NULL, 1535143031, NULL, 1, 'Test', 'Test', '', '2325345436'),
 (3, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', '1admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1268889823, 1, 'Admin', 'istrator', 'ADMIN', '0'),
 (5, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', '3admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1268889823, 1, 'Admin', 'istrator', 'ADMIN', '0'),
@@ -262,7 +271,7 @@ INSERT INTO `qa_users` (`id`, `ip_address`, `username`, `password`, `salt`, `ema
 (13, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', '9admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1268889823, 1, 'Admin', 'istrator', 'ADMIN', '0'),
 (14, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', '10admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1268889823, 1, 'Admin', 'istrator', 'ADMIN', '0'),
 (15, '::1', 'j.kowals@gmail.com', '$2y$08$Wz5LsS5RRHjyp9byGEl.lewU27Rv4cAYMhExti2040P0RlevMxN92', NULL, 'j.kowals@gmail.com', NULL, NULL, NULL, NULL, 1535150163, NULL, 1, 'John', 'Kowalski', '', ''),
-(16, '::1', 'filiprak@wp.pl', '$2y$08$HXQ2t84.pmDFHyUt9PcCwucCIfQsPL8fg7U.EChDqFbBNtNLEZqYG', NULL, 'filiprak@wp.pl', NULL, 'DBtmtpDXBgdGN-Yk-hXLte55f97b1020857fcc2d', 1535236596, 'uTtC9qJs23eDdE5bLizeAe', 1535186203, 1535211398, 1, 'Filip', 'Rak', '', '');
+(16, '::1', 'filiprak@wp.pl', '$2y$08$HXQ2t84.pmDFHyUt9PcCwucCIfQsPL8fg7U.EChDqFbBNtNLEZqYG', NULL, 'filiprak@wp.pl', NULL, 'DBtmtpDXBgdGN-Yk-hXLte55f97b1020857fcc2d', 1535236596, 'uTtC9qJs23eDdE5bLizeAe', 1535186203, 1535297442, 1, 'Filip', 'Rak', '', '');
 
 -- --------------------------------------------------------
 
@@ -384,7 +393,7 @@ ALTER TABLE `qa_login_attempts`
 -- AUTO_INCREMENT dla tabeli `qa_questions`
 --
 ALTER TABLE `qa_questions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 --
 -- AUTO_INCREMENT dla tabeli `qa_scores`
 --
@@ -394,7 +403,7 @@ ALTER TABLE `qa_scores`
 -- AUTO_INCREMENT dla tabeli `qa_suggestions`
 --
 ALTER TABLE `qa_suggestions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 --
 -- AUTO_INCREMENT dla tabeli `qa_tags`
 --
