@@ -1,0 +1,25 @@
+body, div, h1, h2, h3, h4, h5, p, input, button, span {
+  font-family: 'Karla', sans-serif !important;
+  font-weight: 400;
+}
+
+.font-light {
+  font-weight: 400;
+}
+.font-bold {
+  font-weight: 700;
+}
+
+.border-bottom {
+  border-bottom: 1px solid #ff9a36;
+}
+
+.button {
+  border-radius: 0 !important;
+}
+.basic.black.button.active.orange {
+  background-color: #ff9a36;
+}
+.ui.text.container {
+  padding: 5em 0;
+}
