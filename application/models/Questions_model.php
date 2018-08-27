@@ -21,6 +21,33 @@ class Questions_model extends CI_Model
             ->result_array();
     }
 
+    public function find_select_opts($params = array(), $pagination=array()) {
+        $table = $this->db->select('*')
+            ->from('questions')
+            ->or_like($params)
+            ->limit($pagination['limit'])
+            ->offset($pagination['offset'])
+            ->get()
+            ->result_array();
+        $result = array();
+        foreach ($table as $key => $val) { $result[$val['id']] = $val['question']; }
+        return $result;
+    }
+
+    public function find_ans_select_opts($question_id, $pagination=array()) {
+        $table = $this->db->select('*')
+            ->from('answers')
+            ->where('question_id=', $question_id)
+            ->limit($pagination['limit'])
+            ->offset($pagination['offset'])
+            ->order_by('position', 'ASC')
+            ->get()
+            ->result_array();
+        $result = array();
+        foreach ($table as $key => $val) { $result[$val['id']] = $val['answer']; }
+        return $result;
+    }
+
     public function update($id, $data) {
         $this->db->where('id=', $id);
         return $this->db->update('questions', $data);
@@ -83,7 +110,7 @@ class Questions_model extends CI_Model
 
         $answers_filtered = array();
         foreach (array(1,2,3,4) as $position) {
-            $answers_filtered[$position] = array();
+            $answers_filtered[$position] = null;
             foreach ($answers as $ans) {
                 if ($ans['position'] == $position) {
                     $answers_filtered[$position] = $ans;

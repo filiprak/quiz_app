@@ -5,8 +5,6 @@ include_once 'Admin_panel.php';
 
 class Tags extends Admin_panel
 {
-    private $upload_config;
-
     public function __construct()
     {
         parent::__construct();
@@ -153,8 +151,8 @@ class Tags extends Admin_panel
         $this->form_validation->set_rules('score_c', 'score C', 'trim|is_natural');
         $this->form_validation->set_rules('score_p', 'score P', 'trim|is_natural');
 
-        if (isset($_POST) && !empty($_POST) || (isset($_FILES) && !empty($_FILES))) {
-            if (isset($_POST) && !empty($_POST) && $this->form_validation->run() === TRUE) {
+        if (isset($_POST) && !empty($_POST)) {
+            if ($this->form_validation->run() === TRUE) {
                 $tag['description'] = $this->input->post('description');
                 $tag['name'] = $this->input->post('name');
                 $tag['score_A'] = $this->input->post('score_a');
