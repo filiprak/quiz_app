@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Czas generowania: 26 Sie 2018, 17:34
+-- Czas generowania: 27 Sie 2018, 08:19
 -- Wersja serwera: 5.7.22-0ubuntu0.16.04.1
 -- Wersja PHP: 5.6.37-1+ubuntu16.04.1+deb.sury.org+1
 
@@ -53,8 +53,7 @@ INSERT INTO `qa_answers` (`id`, `question_id`, `answer`, `score_A`, `score_I`, `
 (13, 26, 'green', 0, 0, 0, 0, 'group2', 3),
 (14, 26, 'black', 0, 0, 0, 0, 'group1', 4),
 (31, 1, 'no', 0, 0, 0, 0, 'group3', 1),
-(32, 1, 'yes', 0, 0, 0, 0, 'group4', 2),
-(34, 1, 'asdasd', 1, 0, 0, 0, 'asdasd', 4);
+(32, 1, 'yes', 0, 0, 0, 0, 'group4', 2);
 
 -- --------------------------------------------------------
 
@@ -89,14 +88,6 @@ CREATE TABLE `qa_login_attempts` (
   `time` int(11) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Zrzut danych tabeli `qa_login_attempts`
---
-
-INSERT INTO `qa_login_attempts` (`id`, `ip_address`, `login`, `time`) VALUES
-(2, '127.0.0.1', 'tech123', 1535211369),
-(3, '127.0.0.1', 'tech123', 1535211370);
-
 -- --------------------------------------------------------
 
 --
@@ -116,7 +107,7 @@ CREATE TABLE `qa_questions` (
 INSERT INTO `qa_questions` (`id`, `question`, `group_id`) VALUES
 (1, 'Do you like pancakes ?', 'group1'),
 (2, 'The actor John Gielgud believed that of all Shakespeare\'s characters Hamlet is probably the one most like Shakespeare himself–since, of all Shakespeare\'s characters, only Hamlet can be imagined to have written all the Shakespearean plays. How good an understanding of Hamlet\'s character does Gielgud\'s belief reflect?', 'group1'),
-(3, '	What is meant by the phrase "the rise of religious fundamentalism"? Is it an actual current phenomenon? If so, what accounts for its occurrence at this point in history?', 'group1'),
+(3, 'What is meant by the phrase "the rise of religious fundamentalism"? Is it an actual current phenomenon? If so, what accounts for its occurrence at this point in history?', 'group1'),
 (4, 'Your summer vacation–what was it really like?\r\n', 'group2'),
 (5, 'What is time?\r\n', 'group3'),
 (6, 'What determines what dreams a person has when he or she sleeps?\r\n', 'group3'),
@@ -141,15 +132,25 @@ INSERT INTO `qa_questions` (`id`, `question`, `group_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `qa_rating`
+-- Struktura tabeli dla tabeli `qa_ratings`
 --
 
-CREATE TABLE `qa_rating` (
+CREATE TABLE `qa_ratings` (
   `id` int(11) NOT NULL,
   `suggestion_id` int(11) NOT NULL,
   `score_id` int(11) NOT NULL,
   `rating` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Zrzut danych tabeli `qa_ratings`
+--
+
+INSERT INTO `qa_ratings` (`id`, `suggestion_id`, `score_id`, `rating`) VALUES
+(1, 1, 1, 1),
+(2, 1, 2, 0),
+(3, 36, 1, 0),
+(4, 1, 3, 0);
 
 -- --------------------------------------------------------
 
@@ -257,7 +258,7 @@ CREATE TABLE `qa_users` (
 --
 
 INSERT INTO `qa_users` (`id`, `ip_address`, `username`, `password`, `salt`, `email`, `activation_code`, `forgotten_password_code`, `forgotten_password_time`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`) VALUES
-(1, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', 'admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1535272846, 1, 'Admin', 'Istrator', 'ADMIN', '0'),
+(1, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', 'admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1535310463, 1, 'Admin', 'Istrator', 'ADMIN', '0'),
 (2, '::1', 'test@test.com', '$2y$08$IrlbOvTg5A7inOIskAKqK.HpqlgDBVqs/Gs6dTG1Xn0M4tos3SY1.', NULL, 'test@test.com', NULL, NULL, NULL, NULL, 1535143031, NULL, 1, 'Test', 'Test', '', '2325345436'),
 (3, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', '1admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1268889823, 1, 'Admin', 'istrator', 'ADMIN', '0'),
 (5, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', '3admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1268889823, 1, 'Admin', 'istrator', 'ADMIN', '0'),
@@ -271,7 +272,7 @@ INSERT INTO `qa_users` (`id`, `ip_address`, `username`, `password`, `salt`, `ema
 (13, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', '9admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1268889823, 1, 'Admin', 'istrator', 'ADMIN', '0'),
 (14, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', '10admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1268889823, 1, 'Admin', 'istrator', 'ADMIN', '0'),
 (15, '::1', 'j.kowals@gmail.com', '$2y$08$Wz5LsS5RRHjyp9byGEl.lewU27Rv4cAYMhExti2040P0RlevMxN92', NULL, 'j.kowals@gmail.com', NULL, NULL, NULL, NULL, 1535150163, NULL, 1, 'John', 'Kowalski', '', ''),
-(16, '::1', 'filiprak@wp.pl', '$2y$08$HXQ2t84.pmDFHyUt9PcCwucCIfQsPL8fg7U.EChDqFbBNtNLEZqYG', NULL, 'filiprak@wp.pl', NULL, 'DBtmtpDXBgdGN-Yk-hXLte55f97b1020857fcc2d', 1535236596, 'uTtC9qJs23eDdE5bLizeAe', 1535186203, 1535297442, 1, 'Filip', 'Rak', '', '');
+(16, '::1', 'filiprak@wp.pl', '$2y$08$HXQ2t84.pmDFHyUt9PcCwucCIfQsPL8fg7U.EChDqFbBNtNLEZqYG', NULL, 'filiprak@wp.pl', NULL, 'DBtmtpDXBgdGN-Yk-hXLte55f97b1020857fcc2d', 1535236596, 'uTtC9qJs23eDdE5bLizeAe', 1535186203, 1535350095, 1, 'Filip', 'Rak', '', '');
 
 -- --------------------------------------------------------
 
@@ -335,6 +336,13 @@ ALTER TABLE `qa_questions`
   ADD UNIQUE KEY `id` (`id`);
 
 --
+-- Indexes for table `qa_ratings`
+--
+ALTER TABLE `qa_ratings`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `id` (`id`);
+
+--
 -- Indexes for table `qa_scores`
 --
 ALTER TABLE `qa_scores`
@@ -394,6 +402,11 @@ ALTER TABLE `qa_login_attempts`
 --
 ALTER TABLE `qa_questions`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+--
+-- AUTO_INCREMENT dla tabeli `qa_ratings`
+--
+ALTER TABLE `qa_ratings`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT dla tabeli `qa_scores`
 --

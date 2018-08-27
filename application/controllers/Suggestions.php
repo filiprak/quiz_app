@@ -38,7 +38,7 @@ class Suggestions extends Admin_panel
             'description' => $search_suggestion,
             'name' => $search_suggestion
         ) : array();
-        $suggestions = $this->suggestions_model->find($search_params, array(
+        $suggestions = $this->suggestions_model->find_by_rank($search_params, array(
             'limit' => $perpage,
             'offset' => $perpage * ($page - 1)
         ));

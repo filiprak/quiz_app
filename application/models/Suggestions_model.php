@@ -21,6 +21,18 @@ class Suggestions_model extends CI_Model
             ->result_array();
     }
 
+    public function find_by_rank($params = array(), $pagination=array()) {
+        return $this->db->select(' *,
+                                    (SELECT count(*) from qa_ratings r WHERE r.suggestion_id = s.id AND `rating` = 1) as likes,
+                                    (SELECT count(*) from qa_ratings r WHERE r.suggestion_id = s.id AND `rating` = 0) as dislikes')
+            ->or_like($params)
+            ->from('suggestions s')
+            ->limit($pagination['limit'])
+            ->offset($pagination['offset'])
+            ->get()
+            ->result_array();
+    }
+
     public function update($id, $data) {
         $this->db->where('id=', $id);
         return $this->db->update('suggestions', $data);

@@ -46,6 +46,18 @@
                 'wrap_label' => true,
                 'label_design' => 'purple circular',
                 'width' => '15%'),
+            'likes' => array(
+                'title' => 'Likes',
+                'type' => 'number',
+                'wrap_label' => true,
+                'label_design' => 'green',
+                'width' => '15%'),
+            'dislikes' => array(
+                'title' => 'Dislikes',
+                'type' => 'number',
+                'wrap_label' => true,
+                'label_design' => 'red',
+                'width' => '15%'),
         ),
         'btn_col_width' => '100px'
     ),
