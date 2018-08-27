@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Czas generowania: 27 Sie 2018, 08:19
+-- Czas generowania: 27 Sie 2018, 23:16
 -- Wersja serwera: 5.7.22-0ubuntu0.16.04.1
 -- Wersja PHP: 5.6.37-1+ubuntu16.04.1+deb.sury.org+1
 
@@ -149,7 +149,6 @@ CREATE TABLE `qa_ratings` (
 INSERT INTO `qa_ratings` (`id`, `suggestion_id`, `score_id`, `rating`) VALUES
 (1, 1, 1, 1),
 (2, 1, 2, 0),
-(3, 36, 1, 0),
 (4, 1, 3, 0);
 
 -- --------------------------------------------------------
@@ -161,30 +160,39 @@ INSERT INTO `qa_ratings` (`id`, `suggestion_id`, `score_id`, `rating`) VALUES
 CREATE TABLE `qa_scores` (
   `id` int(11) NOT NULL,
   `name` varchar(256) COLLATE utf8_unicode_ci NOT NULL,
-  `dob` date NOT NULL,
+  `dob` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
   `gender` varchar(24) COLLATE utf8_unicode_ci NOT NULL,
   `email` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Time and Date',
-  `question1_id` int(11) NOT NULL COMMENT 'ID of the question shown',
-  `question1_answer_id` int(11) NOT NULL COMMENT 'ID of answer that was chosen',
-  `question2_id` int(11) NOT NULL COMMENT 'ID of the question shown',
-  `question2_answer_id` int(11) NOT NULL COMMENT 'ID of answer that was chosen',
-  `question3_id` int(11) NOT NULL COMMENT 'ID of the question shown',
-  `question3_answer_id` int(11) NOT NULL COMMENT 'ID of answer that was chosen',
-  `question4_id` int(11) NOT NULL COMMENT 'ID of the question shown',
-  `question4_answer_id` int(11) NOT NULL COMMENT 'ID of answer that was chosen',
-  `question5_id` int(11) NOT NULL COMMENT 'ID of the question shown',
-  `question5_answer_id` int(11) NOT NULL COMMENT 'ID of answer that was chosen',
-  `tag1_id` int(11) NOT NULL COMMENT 'ID of tag chosen',
-  `tag2_id` int(11) NOT NULL COMMENT 'ID of tag chosen',
-  `tag3_id` int(11) NOT NULL COMMENT 'ID of tag chosen',
-  `tag4_id` int(11) NOT NULL COMMENT 'ID of tag chosen',
-  `tag5_id` int(11) NOT NULL COMMENT 'ID of tag chosen',
+  `question1_id` int(11) DEFAULT NULL COMMENT 'ID of the question shown',
+  `question1_answer_id` int(11) DEFAULT NULL COMMENT 'ID of answer that was chosen',
+  `question2_id` int(11) DEFAULT NULL COMMENT 'ID of the question shown',
+  `question2_answer_id` int(11) DEFAULT NULL COMMENT 'ID of answer that was chosen',
+  `question3_id` int(11) DEFAULT NULL COMMENT 'ID of the question shown',
+  `question3_answer_id` int(11) DEFAULT NULL COMMENT 'ID of answer that was chosen',
+  `question4_id` int(11) DEFAULT NULL COMMENT 'ID of the question shown',
+  `question4_answer_id` int(11) DEFAULT NULL COMMENT 'ID of answer that was chosen',
+  `question5_id` int(11) DEFAULT NULL COMMENT 'ID of the question shown',
+  `question5_answer_id` int(11) DEFAULT NULL COMMENT 'ID of answer that was chosen',
+  `tag1_id` int(11) DEFAULT NULL COMMENT 'ID of tag chosen',
+  `tag2_id` int(11) DEFAULT NULL COMMENT 'ID of tag chosen',
+  `tag3_id` int(11) DEFAULT NULL COMMENT 'ID of tag chosen',
+  `tag4_id` int(11) DEFAULT NULL COMMENT 'ID of tag chosen',
+  `tag5_id` int(11) DEFAULT NULL COMMENT 'ID of tag chosen',
   `total_score_A` int(16) NOT NULL COMMENT 'Total addition of the A Score of all Questions and Tags',
   `total_score_I` int(16) NOT NULL COMMENT 'Total addition of the I Score of all Questions and Tags',
   `total_score_C` int(16) NOT NULL COMMENT 'Total addition of the C Score of all Questions and Tags',
   `total_score_P` int(16) NOT NULL COMMENT 'Total addition of the P Score of all Questions and Tags'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Zrzut danych tabeli `qa_scores`
+--
+
+INSERT INTO `qa_scores` (`id`, `name`, `dob`, `gender`, `email`, `timestamp`, `question1_id`, `question1_answer_id`, `question2_id`, `question2_answer_id`, `question3_id`, `question3_answer_id`, `question4_id`, `question4_answer_id`, `question5_id`, `question5_answer_id`, `tag1_id`, `tag2_id`, `tag3_id`, `tag4_id`, `tag5_id`, `total_score_A`, `total_score_I`, `total_score_C`, `total_score_P`) VALUES
+(1, 'Test User', '2017-12-11', 'male', 'test@user.com', '2018-08-27 17:54:52', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 200, 175, 140, 60),
+(2, 'Test User', '2018-08-14', 'female', 'asdsad@i.ll', '2018-08-27 19:47:04', 1, 31, 1, 31, 1, 31, 1, 31, 1, 31, 3, 3, 3, 3, 3, 0, 0, 0, 0),
+(4, 'John', '45-64', 'female', 'test@t.t', '2018-08-27 21:14:41', 9, NULL, 17, NULL, 11, NULL, 4, NULL, 2, NULL, 3, 4, 3, 3, 3, 400, 200, 90, 100);
 
 -- --------------------------------------------------------
 
@@ -209,7 +217,7 @@ CREATE TABLE `qa_suggestions` (
 
 INSERT INTO `qa_suggestions` (`id`, `name`, `description`, `score_A`, `score_I`, `score_C`, `score_P`, `image`) VALUES
 (1, 'Suggestion 1', 'This is suggestion description.', 22, 7, 5, 0, NULL),
-(36, 'test upload', 'file', 23, 34, 53, 4, '4c9116ae4018bb16c10cf410eb67c249.jpg');
+(45, 'Suggestion 2', 'Suggestion text', 25, 100, 30, 45, '0c0c268bf31499b54c027443fb394103.png');
 
 -- --------------------------------------------------------
 
@@ -226,6 +234,14 @@ CREATE TABLE `qa_tags` (
   `score_C` int(16) NOT NULL,
   `score_P` int(16) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Zrzut danych tabeli `qa_tags`
+--
+
+INSERT INTO `qa_tags` (`id`, `name`, `description`, `score_A`, `score_I`, `score_C`, `score_P`) VALUES
+(3, 'tag1', 'tag1', 0, 0, 0, 0),
+(4, 'tag2', 'TAG2', 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -258,7 +274,7 @@ CREATE TABLE `qa_users` (
 --
 
 INSERT INTO `qa_users` (`id`, `ip_address`, `username`, `password`, `salt`, `email`, `activation_code`, `forgotten_password_code`, `forgotten_password_time`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`) VALUES
-(1, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', 'admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1535310463, 1, 'Admin', 'Istrator', 'ADMIN', '0'),
+(1, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', 'admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1535390422, 1, 'Admin', 'Istrator', 'ADMIN', '0'),
 (2, '::1', 'test@test.com', '$2y$08$IrlbOvTg5A7inOIskAKqK.HpqlgDBVqs/Gs6dTG1Xn0M4tos3SY1.', NULL, 'test@test.com', NULL, NULL, NULL, NULL, 1535143031, NULL, 1, 'Test', 'Test', '', '2325345436'),
 (3, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', '1admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1268889823, 1, 'Admin', 'istrator', 'ADMIN', '0'),
 (5, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', '3admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1268889823, 1, 'Admin', 'istrator', 'ADMIN', '0'),
@@ -271,8 +287,7 @@ INSERT INTO `qa_users` (`id`, `ip_address`, `username`, `password`, `salt`, `ema
 (12, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', '8admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1268889823, 1, 'Admin', 'istrator', 'ADMIN', '0'),
 (13, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', '9admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1268889823, 1, 'Admin', 'istrator', 'ADMIN', '0'),
 (14, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', '10admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1268889823, 1, 'Admin', 'istrator', 'ADMIN', '0'),
-(15, '::1', 'j.kowals@gmail.com', '$2y$08$Wz5LsS5RRHjyp9byGEl.lewU27Rv4cAYMhExti2040P0RlevMxN92', NULL, 'j.kowals@gmail.com', NULL, NULL, NULL, NULL, 1535150163, NULL, 1, 'John', 'Kowalski', '', ''),
-(16, '::1', 'filiprak@wp.pl', '$2y$08$HXQ2t84.pmDFHyUt9PcCwucCIfQsPL8fg7U.EChDqFbBNtNLEZqYG', NULL, 'filiprak@wp.pl', NULL, 'DBtmtpDXBgdGN-Yk-hXLte55f97b1020857fcc2d', 1535236596, 'uTtC9qJs23eDdE5bLizeAe', 1535186203, 1535350095, 1, 'Filip', 'Rak', '', '');
+(15, '::1', 'j.kowals@gmail.com', '$2y$08$Wz5LsS5RRHjyp9byGEl.lewU27Rv4cAYMhExti2040P0RlevMxN92', NULL, 'j.kowals@gmail.com', NULL, NULL, NULL, NULL, 1535150163, NULL, 1, 'John', 'Kowalski', '', '');
 
 -- --------------------------------------------------------
 
@@ -301,9 +316,7 @@ INSERT INTO `qa_users_groups` (`id`, `user_id`, `group_id`) VALUES
 (14, 8, 1),
 (18, 14, 1),
 (19, 14, 2),
-(25, 15, 2),
-(32, 16, 1),
-(33, 16, 2);
+(25, 15, 2);
 
 --
 -- Indeksy dla zrzutów tabel
@@ -386,7 +399,7 @@ ALTER TABLE `qa_users_groups`
 -- AUTO_INCREMENT dla tabeli `qa_answers`
 --
 ALTER TABLE `qa_answers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 --
 -- AUTO_INCREMENT dla tabeli `qa_groups`
 --
@@ -396,7 +409,7 @@ ALTER TABLE `qa_groups`
 -- AUTO_INCREMENT dla tabeli `qa_login_attempts`
 --
 ALTER TABLE `qa_login_attempts`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT dla tabeli `qa_questions`
 --
@@ -411,17 +424,17 @@ ALTER TABLE `qa_ratings`
 -- AUTO_INCREMENT dla tabeli `qa_scores`
 --
 ALTER TABLE `qa_scores`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT dla tabeli `qa_suggestions`
 --
 ALTER TABLE `qa_suggestions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 --
 -- AUTO_INCREMENT dla tabeli `qa_tags`
 --
 ALTER TABLE `qa_tags`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT dla tabeli `qa_users`
 --
