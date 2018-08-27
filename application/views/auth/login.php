@@ -3,7 +3,7 @@
 <body class="login-body">
 <div class="ui middle aligned center aligned grid login">
     <div style="max-width: 450px"  class="column">
-        <h2 class="ui teal header">
+        <h2 class="ui orange header">
             <div class="content"><?php echo lang('login_heading');?></div>
         </h2>
         <div style="display: <?php echo empty($message) ? 'none' : 'block'; ?>" class="ui error message">
@@ -25,13 +25,13 @@
                         <?php echo form_input($password, '', 'placeholder=Password');?>
                     </div>
                 </div>
-                <div class="field">
+                <div style="text-align: left" class="field left aligned">
                     <div class="ui checkbox">
                         <?php echo form_checkbox('remember', '1', FALSE, 'id="remember" class="ui checkbox"');?>
                         <?php echo lang('login_remember_label', 'remember');?>
                     </div>
                 </div>
-                <input type="submit" class="ui fluid large teal submit button" value="<?php echo lang('login_submit_btn'); ?>">
+                <input type="submit" class="ui fluid large orange submit button" value="<?php echo lang('login_submit_btn'); ?>">
             </div>
 
         </form>

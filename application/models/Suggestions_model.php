@@ -47,10 +47,19 @@ class Suggestions_model extends CI_Model
 
     public function remove($id) {
         if (!is_numeric($id) || empty($id)) return false;
+
+        $this->db->trans_start();
+
         $id = (int) $id;
         $this->db->where('id=', $id);
-        $res = $this->db->delete('suggestions');
-        return $res ? true : false;
+        $this->db->delete('suggestions');
+
+        // delete ranks
+        $this->db->where('suggestion_id=', $id);
+        $this->db->delete('ratings');
+
+        $this->db->trans_complete();
+        return $this->db->trans_status() === FALSE ? false : true;
     }
 
     public function total($params = array()) {

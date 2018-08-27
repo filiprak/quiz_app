@@ -3,7 +3,7 @@
 <body class="login-body">
 <div class="ui middle aligned center aligned grid login">
     <div style="max-width: 450px"  class="column">
-        <h2 class="ui teal header">
+        <h2 class="ui orange header">
             <div class="content"><?php echo lang('forgot_password_heading');?></div>
         </h2>
         <div class="ui message">
@@ -22,7 +22,7 @@
                         <?php echo form_input($identity, '', 'placeholder=Email');?>
                     </div>
                 </div>
-                <input type="submit" class="ui fluid large teal submit button" value="<?php echo lang('forgot_password_submit_btn'); ?>">
+                <input type="submit" class="ui fluid large orange submit button" value="<?php echo lang('forgot_password_submit_btn'); ?>">
             </div>
 
         </form>

@@ -21,7 +21,7 @@
                 'title' => 'Group',
                 'type' => 'utf-8',
                 'wrap_label' => true,
-                'label_design' => 'orange circular',
+                'label_design' => 'blue circular',
                 'width' => '15%'),
         ),
         'btn_col_width' => '100px'
