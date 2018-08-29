@@ -36,18 +36,46 @@ body, div, h1, h2, h3, h4, h5, p, input, button, span {
   color: var(--primary-color) !important;
 }
 
-.button {
+.label.togglable {
+  background-color: #fff !important;
+  color: var(--primary-color) !important;
+  border: 1px solid var(--primary-color) !important;
   border-radius: 0 !important;
+  margin: 0 !important;
 }
-.basic.black.button.active {
-  background-color: var(--primary-color);
+.label.togglable.active {
+  background-color: var(--primary-color) !important;
+  color: #fff !important;
+}
+.basic.button.active {
+  background-color: var(--primary-color) !important;
+  color: #fff !important;
 }
 .ui.text.container {
   padding: 5em 0;
 }
 
+.input-with-prompt {
+  position: relative;
+}
+.input-prompt {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  display: none;
+}
+
+.question.active {
+  opacity: 1;
+}
+
 .question {
-  padding: 80px 0;
+  opacity: 0.2;
+}
+
+.question {
+  padding: 50px 0;
+  height: 185px;
 }
 .questions-wrapper {
   margin-top: calc(50vh - 250px);
