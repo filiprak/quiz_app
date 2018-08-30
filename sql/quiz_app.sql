@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Czas generowania: 27 Sie 2018, 23:16
+-- Czas generowania: 31 Sie 2018, 01:18
 -- Wersja serwera: 5.7.22-0ubuntu0.16.04.1
 -- Wersja PHP: 5.6.37-1+ubuntu16.04.1+deb.sury.org+1
 
@@ -43,17 +43,94 @@ CREATE TABLE `qa_answers` (
 --
 
 INSERT INTO `qa_answers` (`id`, `question_id`, `answer`, `score_A`, `score_I`, `score_C`, `score_P`, `next_question_group_id`, `position`) VALUES
-(1, 23, 'red', 0, 0, 0, 0, 'group3', 1),
-(2, 23, 'blue', 0, 0, 0, 0, 'group4', 2),
-(3, 23, 'green', 0, 0, 0, 0, 'group2', 3),
-(4, 23, 'black', 0, 0, 0, 0, 'group1', 4),
-(9, 25, '3', 0, 0, 0, 0, 'group3', 1),
-(10, 25, '5', 0, 0, 0, 0, 'group2', 3),
-(12, 26, 'blue', 0, 0, 0, 0, 'group4', 2),
-(13, 26, 'green', 0, 0, 0, 0, 'group2', 3),
-(14, 26, 'black', 0, 0, 0, 0, 'group1', 4),
-(31, 1, 'no', 0, 0, 0, 0, 'group3', 1),
-(32, 1, 'yes', 0, 0, 0, 0, 'group4', 2);
+(1, 23, 'red', 50, 0, 0, 0, 'group3', 1),
+(2, 23, 'blue', 0, 70, 0, 0, 'group3', 2),
+(3, 23, 'green', 0, 0, 40, 0, 'group2', 3),
+(4, 23, 'black', 0, 0, 0, 100, 'group1', 4),
+(31, 1, 'no', 0, 200, 0, 0, 'group3', 1),
+(32, 1, 'yes', 0, 0, 145, 0, 'group3', 2),
+(33, 2, 'Answer 1', 50, 0, 0, 0, 'group3', 1),
+(34, 2, 'Answer 2', 0, 75, 0, 0, 'group3', 2),
+(35, 2, 'Answer 3', 0, 0, 60, 0, 'group2', 3),
+(36, 2, 'Answer 4', 0, 0, 0, 20, 'group1', 4),
+(37, 3, 'Answer 1', 0, 0, 50, 0, 'group3', 1),
+(38, 3, 'Answer 2', 0, 75, 0, 0, 'group3', 2),
+(39, 3, 'Answer 3', 0, 10, 0, 60, 'group2', 3),
+(40, 3, 'Answer 4', 100, 0, 20, 0, 'group1', 4),
+(41, 4, 'Answer 1', 0, 40, 0, 0, 'group3', 1),
+(42, 4, 'Answer 2', 0, 0, 70, 0, 'group3', 2),
+(43, 4, 'Answer 3', 100, 0, 0, 0, 'group2', 3),
+(44, 4, 'Answer 4', 0, 0, 0, 100, 'group1', 4),
+(45, 5, 'Answer 1', 0, 70, 0, 0, 'group3', 1),
+(46, 5, 'Answer 2', 0, 0, 0, 70, 'group3', 2),
+(47, 5, 'Answer 3', 0, 0, 70, 0, 'group2', 3),
+(48, 5, 'Answer 4', 70, 0, 10, 0, 'group1', 4),
+(49, 1, 'not at all', 0, 0, 0, 55, 'group2', 3),
+(50, 1, 'sure', 0, 55, 0, 0, 'group1', 4),
+(51, 6, 'brain', 40, 0, 0, 0, 'group3', 1),
+(52, 6, 'music', 0, 0, 70, 10, 'group3', 2),
+(53, 6, 'weather', 100, 0, 30, 0, 'group2', 3),
+(54, 6, 'temperature', 0, 30, 0, 0, 'group2', 4),
+(55, 7, 'yes', 0, 0, 0, 30, 'group1', 1),
+(56, 7, 'no', 70, 0, 0, 0, 'group3', 2),
+(57, 7, 'sure', 0, 0, 50, 0, 'group2', 3),
+(58, 7, 'i dont think so', 0, 50, 0, 0, 'group2', 4),
+(59, 8, 'Answer 1', 55, 0, 0, 0, 'group1', 1),
+(60, 8, 'Answer 2', 0, 0, 55, 0, 'group3', 2),
+(61, 8, 'Answer 3', 0, 55, 0, 0, 'group2', 3),
+(62, 8, 'Answer 4', 0, 0, 0, 55, 'group1', 4),
+(63, 9, 'Answer 1', 0, 10, 0, 0, 'group1', 1),
+(64, 9, 'Answer 2', 0, 0, 0, 20, 'group3', 2),
+(65, 9, 'Answer 3', 30, 0, 0, 0, 'group2', 3),
+(66, 9, 'Answer 4', 0, 0, 50, 0, 'group2', 4),
+(67, 11, 'Answer 1', 100, 10, 0, 0, 'group1', 1),
+(68, 11, 'Answer 2', 0, 30, 0, 10, 'group3', 2),
+(69, 11, 'Answer 3', 30, 0, 0, 30, 'group2', 3),
+(70, 11, 'Answer 4', 30, 60, 0, 10, 'group1', 4),
+(71, 12, 'Answer 1', 20, 0, 10, 0, 'group1', 1),
+(72, 12, 'Answer 2', 10, 0, 50, 0, 'group3', 2),
+(73, 12, 'Answer 3', 0, 0, 50, 0, 'group2', 3),
+(74, 12, 'Answer 4', 30, 0, 0, 100, 'group2', 4),
+(75, 13, 'Answer 1', 0, 10, 30, 0, 'group1', 1),
+(76, 13, 'Answer 2', 30, 0, 0, 0, 'group3', 2),
+(77, 13, 'Answer 3', 0, 0, 0, 70, 'group2', 3),
+(78, 13, 'Answer 4', 100, 0, 0, 0, 'group2', 4),
+(79, 14, 'Answer 1', 40, 30, 0, 0, 'group1', 1),
+(80, 14, 'Answer 2', 0, 0, 0, 100, 'group3', 2),
+(81, 14, 'Answer 3', 0, 0, 200, 0, 'group1', 3),
+(82, 14, 'Answer 4', 20, 15, 0, 0, 'group2', 4),
+(83, 15, 'Answer 1', 100, 0, 0, 0, 'group3', 1),
+(84, 15, 'Answer 2', 0, 100, 0, 0, 'group3', 2),
+(85, 15, 'Answer 3', 0, 0, 100, 0, 'group2', 3),
+(86, 15, 'Answer 4', 0, 0, 0, 100, 'group1', 4),
+(87, 16, 'Answer 1', 30, 0, 0, 0, 'group3', 1),
+(88, 16, 'Answer 2', 0, 0, 30, 0, 'group3', 2),
+(89, 16, 'Answer 3', 0, 55, 0, 0, 'group2', 3),
+(90, 16, 'Answer 4', 0, 0, 0, 55, 'group1', 4),
+(91, 17, '4000', 10, 0, 0, 0, 'group1', 1),
+(92, 17, '5345', 0, 55, 0, 0, 'group3', 2),
+(93, 17, '657634', 0, 0, 0, 35, 'group2', 3),
+(94, 17, '100000', 35, 0, 35, 0, 'group2', 4),
+(95, 19, 'Answer 1', 10, 0, 10, 0, 'group1', 1),
+(96, 19, 'Answer 2', 100, 0, 0, 0, 'group3', 2),
+(97, 19, 'Answer 3', 0, 100, 0, 0, 'group2', 3),
+(98, 19, 'Answer 4', 0, 0, 0, 70, 'group2', 4),
+(99, 38, '<18', 0, 100, 0, 0, 'group1', 1),
+(100, 38, '19 - 30', 0, 160, 0, 0, 'group3', 2),
+(101, 38, '31 -45', 0, 10, 0, 80, 'group1', 3),
+(102, 38, '46 <', 0, 80, 0, 80, 'group2', 4),
+(103, 40, 'Answer 1', 10, 0, 10, 0, 'group1', 1),
+(104, 40, 'Answer 2', 100, 0, 0, 0, 'group3', 2),
+(105, 40, 'Answer 3', 0, 100, 0, 0, 'group2', 3),
+(106, 40, 'Answer 4', 0, 0, 0, 70, 'group2', 4),
+(107, 41, 'Answer 1', 10, 0, 10, 0, 'group1', 1),
+(108, 41, 'Answer 2', 100, 0, 0, 0, 'group3', 2),
+(109, 41, 'Answer 3', 0, 100, 0, 0, 'group2', 3),
+(110, 41, 'Answer 4', 0, 0, 0, 70, 'group2', 4),
+(111, 42, 'Answer 1', 10, 0, 10, 0, 'group1', 1),
+(112, 42, 'Answer 2', 100, 0, 0, 0, 'group3', 2),
+(113, 42, 'Answer 3', 0, 100, 0, 0, 'group2', 3),
+(114, 42, 'Answer 4', 0, 0, 0, 70, 'group2', 4);
 
 -- --------------------------------------------------------
 
@@ -108,26 +185,25 @@ INSERT INTO `qa_questions` (`id`, `question`, `group_id`) VALUES
 (1, 'Do you like pancakes ?', 'group1'),
 (2, 'The actor John Gielgud believed that of all Shakespeare\'s characters Hamlet is probably the one most like Shakespeare himself–since, of all Shakespeare\'s characters, only Hamlet can be imagined to have written all the Shakespearean plays. How good an understanding of Hamlet\'s character does Gielgud\'s belief reflect?', 'group1'),
 (3, 'What is meant by the phrase "the rise of religious fundamentalism"? Is it an actual current phenomenon? If so, what accounts for its occurrence at this point in history?', 'group1'),
-(4, 'Your summer vacation–what was it really like?\r\n', 'group2'),
-(5, 'What is time?\r\n', 'group3'),
-(6, 'What determines what dreams a person has when he or she sleeps?\r\n', 'group3'),
-(7, 'Is there intelligent life elsewhere in the universe?\r\n', 'group1'),
-(8, 'Arm on the left, arm on the right.  Eye on the left, eye on the right. Nose in the middle. Mouth in the middle. –Why is the outward appearance of the human body so symmetrical?\r\n', 'group4'),
-(9, 'What, exactly, is it about good jokes that makes people laugh?\r\n', 'group1'),
-(11, '	What is meant by the phrase "the rise of religious fundamentalism"? Is it an actual current phenomenon? If so, what accounts for its occurrence at this point in history?', 'group1'),
-(12, 'According to Lord Acton, "Power corrupts and absolute power corrupts absolutely." Comment, taking a historical perspective.\r\n', 'group2'),
-(13, 'How does your generation differ from that of the 1960\'s?*\r\n', 'group3'),
-(14, 'Walter Kerr has argued that comedy, at bottom, is pessimistic, tragedy optimistic. Is he right?\r\n', 'group3'),
-(15, 'Various countries–the United Kingdom, India, Pakistan, Israel, the Philippines–have already elected female chief executives. Why has the U.S., which is arguably the world\'s leading democracy, not yet done so?\r\n', 'group5'),
-(16, 'Do human beings have free will?\r\n', 'group4'),
-(17, 'How many kilometers length have the earth radius ?', 'group_test'),
-(18, 'd', 'group2'),
-(19, 'test', 'group_test'),
-(21, 'wqeqwewqe', 'qweqweqwe'),
+(4, 'Your summer vacation–what was it really like?', 'group2'),
+(5, 'What is time?', 'group3'),
+(6, 'What determines what dreams a person has when he or she sleeps?', 'group3'),
+(7, 'Is there intelligent life elsewhere in the universe?', 'group1'),
+(8, 'Arm on the left, arm on the right.  Eye on the left, eye on the right. Nose in the middle. Mouth in the middle. –Why is the outward appearance of the human body so symmetrical?', 'group3'),
+(9, 'What, exactly, is it about good jokes that makes people laugh?', 'group1'),
+(11, 'What is meant by the phrase "the rise of religious fundamentalism"? Is it an actual current phenomenon? If so, what accounts for its occurrence at this point in history?', 'group1'),
+(12, 'According to Lord Acton, "Power corrupts and absolute power corrupts absolutely." Comment, taking a historical perspective.', 'group2'),
+(13, 'How does your generation differ from that of the 1960\'s?*', 'group3'),
+(14, 'Walter Kerr has argued that comedy, at bottom, is pessimistic, tragedy optimistic. Is he right?', 'group3'),
+(15, 'Various countries–the United Kingdom, India, Pakistan, Israel, the Philippines–have already elected female chief executives. Why has the U.S., which is arguably the world\'s leading democracy, not yet done so?', 'group2'),
+(16, 'Do human beings have free will?', 'group3'),
+(17, 'How many kilometers length have the earth radius ?', 'group2'),
+(19, 'How do you do ?', 'group1'),
 (23, 'What color do you like ?', 'group2'),
-(25, 'dqwewqe', 'group_test'),
-(26, 'What color do you like ?', 'group2'),
-(27, 'How many years old are you ?', 'group9');
+(38, 'Arm on the left, arm on the right.  Eye on the left, eye on the right. Nose in the middle. Mouth in the middle. –Why is the outward appearance of the human body so symmetrical?', 'group3'),
+(40, 'Do human beings have free will?', 'group2'),
+(41, 'Arm on the left, arm on the right.  Eye on the left, eye on the right. Nose in the middle. Mouth in the middle. –Why is the outward appearance of the human body so symmetrical?', 'group2'),
+(42, 'Do human beings have free will?', 'group2');
 
 -- --------------------------------------------------------
 
@@ -161,7 +237,7 @@ CREATE TABLE `qa_scores` (
   `id` int(11) NOT NULL,
   `name` varchar(256) COLLATE utf8_unicode_ci NOT NULL,
   `dob` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
-  `gender` varchar(24) COLLATE utf8_unicode_ci NOT NULL,
+  `gender` varchar(24) COLLATE utf8_unicode_ci DEFAULT NULL,
   `email` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Time and Date',
   `question1_id` int(11) DEFAULT NULL COMMENT 'ID of the question shown',
@@ -192,7 +268,14 @@ CREATE TABLE `qa_scores` (
 INSERT INTO `qa_scores` (`id`, `name`, `dob`, `gender`, `email`, `timestamp`, `question1_id`, `question1_answer_id`, `question2_id`, `question2_answer_id`, `question3_id`, `question3_answer_id`, `question4_id`, `question4_answer_id`, `question5_id`, `question5_answer_id`, `tag1_id`, `tag2_id`, `tag3_id`, `tag4_id`, `tag5_id`, `total_score_A`, `total_score_I`, `total_score_C`, `total_score_P`) VALUES
 (1, 'Test User', '2017-12-11', 'male', 'test@user.com', '2018-08-27 17:54:52', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 200, 175, 140, 60),
 (2, 'Test User', '2018-08-14', 'female', 'asdsad@i.ll', '2018-08-27 19:47:04', 1, 31, 1, 31, 1, 31, 1, 31, 1, 31, 3, 3, 3, 3, 3, 0, 0, 0, 0),
-(4, 'John', '45-64', 'female', 'test@t.t', '2018-08-27 21:14:41', 9, NULL, 17, NULL, 11, NULL, 4, NULL, 2, NULL, 3, 4, 3, 3, 3, 400, 200, 90, 100);
+(4, 'John', '45-64', 'female', 'test@t.t', '2018-08-27 21:14:41', 9, NULL, 17, NULL, 11, NULL, 4, NULL, 2, NULL, 3, 4, 3, 3, 3, 400, 200, 90, 100),
+(5, 'asdsad', '18-29', '', 'sdsad@ww.pww', '2018-08-29 22:25:24', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0),
+(6, 'Filip', '45-64', NULL, 'fr@wp.pl', '2018-08-29 22:33:44', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0),
+(7, 'Adam', '65+', 'male', 'a@a.pl', '2018-08-29 22:38:50', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0),
+(8, 'f', 'under 18', NULL, 'f@wp.pl', '2018-08-29 22:59:29', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0),
+(9, 'Tst', 'under 18', 'male', 'test@t.sp', '2018-08-30 06:53:19', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0),
+(10, 'sddsd', 'under 18', 'male', 'email@w.sd', '2018-08-30 06:55:06', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0),
+(11, 'Andrew', '30-44', NULL, 'andr@wp.pl', '2018-08-30 18:51:18', 16, 89, 15, 84, 14, 82, 41, 107, 9, 65, NULL, NULL, NULL, NULL, NULL, 2510, 6190, 3800, 2880);
 
 -- --------------------------------------------------------
 
@@ -240,8 +323,46 @@ CREATE TABLE `qa_tags` (
 --
 
 INSERT INTO `qa_tags` (`id`, `name`, `description`, `score_A`, `score_I`, `score_C`, `score_P`) VALUES
-(3, 'tag1', 'tag1', 0, 0, 0, 0),
-(4, 'tag2', 'TAG2', 0, 0, 0, 0);
+(3, 'tag1', 'tag1', 120, 40, 0, 10),
+(4, 'tag2', 'TAG2', 30, 0, 50, 0),
+(5, 'tag3', 'tag3', 45, 45, 0, 0),
+(6, 'tag4', 'tg4', 0, 90, 25, 90),
+(7, 'tag5', 'tag5', 45, 0, 85, 0),
+(8, 'tag6', 'tag6', 120, 40, 0, 10),
+(9, 'tag7', 'TAG7', 30, 0, 50, 0),
+(10, 'tag8', 'tag8', 45, 45, 0, 0),
+(11, 'tag9', 'tg9', 0, 90, 25, 90),
+(12, 'tag10', 'tag10', 45, 0, 85, 0),
+(13, 'tag11', 'tag11', 120, 40, 0, 10),
+(14, 'tag22', 'TAG22', 30, 0, 50, 0),
+(15, 'tag32', 'tag32', 45, 45, 0, 0),
+(16, 'tag43', '3tg4', 0, 90, 25, 90),
+(17, 'tag53', 'tag54', 45, 0, 85, 0),
+(18, 'tag65', 'tag65', 120, 40, 0, 10),
+(19, 'tag75', 'TAG75', 30, 0, 50, 0),
+(20, 'tag84', 'tag84', 45, 45, 0, 0),
+(21, 'tag93', 'tg93', 0, 90, 25, 90),
+(22, 'tag104', 'tag105', 45, 0, 85, 0),
+(23, 'tag18', 'tag18', 120, 40, 0, 10),
+(24, 'tag27', 'TAG27', 30, 0, 50, 0),
+(25, 'tag36', 'tag36', 45, 45, 0, 0),
+(26, 'tag467', 'tg467', 0, 90, 25, 90),
+(27, 'tag58', 'tag58', 45, 0, 85, 0),
+(28, 'tag687', 'tag687', 120, 40, 0, 10),
+(29, 'tag756', 'TAG756', 30, 0, 50, 0),
+(30, 'tag845', 'tag845', 45, 45, 0, 0),
+(31, 'tag934', 'tg934', 0, 90, 25, 90),
+(32, 'tag1045', '45tag10', 45, 0, 85, 0),
+(33, 'tag115', 'tag115', 120, 40, 0, 10),
+(34, 'tag224', '4TAG22', 30, 0, 50, 0),
+(35, 'tag323', 'tag323', 45, 45, 0, 0),
+(36, 'tag437', '3tg47', 0, 90, 25, 90),
+(37, 'tag538', 'tag547', 45, 0, 85, 0),
+(38, 'tag657', 'tag657', 120, 40, 0, 10),
+(39, 'tag756', 'TAG756', 30, 0, 50, 0),
+(40, 'tag845', 'tag845', 45, 45, 0, 0),
+(41, 'tag934', 'tg934', 0, 90, 25, 90),
+(42, 'tag1043', 'tag1053', 45, 0, 85, 0);
 
 -- --------------------------------------------------------
 
@@ -274,7 +395,7 @@ CREATE TABLE `qa_users` (
 --
 
 INSERT INTO `qa_users` (`id`, `ip_address`, `username`, `password`, `salt`, `email`, `activation_code`, `forgotten_password_code`, `forgotten_password_time`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`) VALUES
-(1, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', 'admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1535390422, 1, 'Admin', 'Istrator', 'ADMIN', '0'),
+(1, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', 'admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1535650952, 1, 'Admin', 'Istrator', 'ADMIN', '0'),
 (2, '::1', 'test@test.com', '$2y$08$IrlbOvTg5A7inOIskAKqK.HpqlgDBVqs/Gs6dTG1Xn0M4tos3SY1.', NULL, 'test@test.com', NULL, NULL, NULL, NULL, 1535143031, NULL, 1, 'Test', 'Test', '', '2325345436'),
 (3, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', '1admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1268889823, 1, 'Admin', 'istrator', 'ADMIN', '0'),
 (5, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', '3admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1268889823, 1, 'Admin', 'istrator', 'ADMIN', '0'),
@@ -399,7 +520,7 @@ ALTER TABLE `qa_users_groups`
 -- AUTO_INCREMENT dla tabeli `qa_answers`
 --
 ALTER TABLE `qa_answers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=115;
 --
 -- AUTO_INCREMENT dla tabeli `qa_groups`
 --
@@ -414,7 +535,7 @@ ALTER TABLE `qa_login_attempts`
 -- AUTO_INCREMENT dla tabeli `qa_questions`
 --
 ALTER TABLE `qa_questions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 --
 -- AUTO_INCREMENT dla tabeli `qa_ratings`
 --
@@ -424,7 +545,7 @@ ALTER TABLE `qa_ratings`
 -- AUTO_INCREMENT dla tabeli `qa_scores`
 --
 ALTER TABLE `qa_scores`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT dla tabeli `qa_suggestions`
 --
@@ -434,17 +555,17 @@ ALTER TABLE `qa_suggestions`
 -- AUTO_INCREMENT dla tabeli `qa_tags`
 --
 ALTER TABLE `qa_tags`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 --
 -- AUTO_INCREMENT dla tabeli `qa_users`
 --
 ALTER TABLE `qa_users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 --
 -- AUTO_INCREMENT dla tabeli `qa_users_groups`
 --
 ALTER TABLE `qa_users_groups`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 --
 -- Ograniczenia dla zrzutów tabel
 --
