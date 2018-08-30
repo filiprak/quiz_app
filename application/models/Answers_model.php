@@ -1,11 +1,11 @@
 <?php
 
 
-class Tags_model extends CI_Model
+class Answers_model extends CI_Model
 {
     public function get($id) {
         return $this->db->select('*')
-            ->from('tags')
+            ->from('answers')
             ->where('id =', $id)
             ->get()
             ->row_array();
@@ -13,35 +13,22 @@ class Tags_model extends CI_Model
 
     public function find($params = array(), $pagination=array()) {
         return $this->db->select('*')
-            ->from('tags')
+            ->from('answers')
             ->or_like($params)
             ->limit($pagination['limit'])
             ->offset($pagination['offset'])
             ->get()
             ->result_array();
-    }
-
-    public function find_select_opts($params = array(), $pagination=array()) {
-        $table = $this->db->select('*')
-            ->from('tags')
-            ->or_like($params)
-            ->limit($pagination['limit'])
-            ->offset($pagination['offset'])
-            ->get()
-            ->result_array();
-        $result = array();
-        foreach ($table as $key => $val) { $result[$val['id']] = $val['name']; }
-        return $result;
     }
 
     public function update($id, $data) {
         $this->db->where('id=', $id);
-        return $this->db->update('tags', $data);
+        return $this->db->update('answers', $data);
     }
 
     public function create($data) {
         $this->db->set($data);
-        $res = $this->db->insert('tags');
+        $res = $this->db->insert('answers');
         $new_id = $this->db->insert_id();
         return $res ? $new_id : false;
     }
@@ -50,22 +37,12 @@ class Tags_model extends CI_Model
         if (!is_numeric($id) || empty($id)) return false;
         $id = (int) $id;
         $this->db->where('id=', $id);
-        $res = $this->db->delete('tags');
+        $res = $this->db->delete('answers');
         return $res ? true : false;
     }
 
     public function total($params = array()) {
         return $this->db->or_like($params)
-            ->count_all_results('tags');
+            ->count_all_results('answers');
     }
-
-    public function random_tags($limit) {
-        return $this->db->select('*')
-            ->from('tags')
-            ->limit($limit)
-            ->order_by('RAND()')
-            ->get()
-            ->result_array();
-    }
-
 }

@@ -288,7 +288,7 @@ class Suggestions extends Admin_panel
         $this->load->view('suggestions/edit_suggestion', $this->data);
     }
 
-    // json api for dynamic image removing
+    //@JSON api: json api for dynamic image removing
     public function remove_image($suggestion_id) {
         if (!parent::is_admin()) {
             $status = false;

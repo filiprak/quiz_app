@@ -4,7 +4,7 @@ body, div, h1, h2, h3, h4, h5, p, input, button, span {
 }
 
 :root {
-  --primary-color-extra-light: #f2dba9;
+  --primary-color-extra-light: #ffeed3;
   --primary-color-light: #ffa65d;
   --primary-color: #f2711c;
   --primary-color-dark: #c1611c;
@@ -37,11 +37,14 @@ body, div, h1, h2, h3, h4, h5, p, input, button, span {
 }
 
 .label.togglable {
-  background-color: #fff !important;
+  /*background-color: #fff !important;*/
   color: var(--primary-color) !important;
   border: 1px solid var(--primary-color) !important;
   border-radius: 0 !important;
-  margin: 0 !important;
+  background-color: var(--primary-color-extra-light) !important;
+}
+.labels.radio.fluid .label {
+  margin-bottom: 10px !important;
 }
 .label.togglable.active {
   background-color: var(--primary-color) !important;
@@ -73,9 +76,16 @@ body, div, h1, h2, h3, h4, h5, p, input, button, span {
   opacity: 0.2;
 }
 
-.question {
+.question:not(.main) {
   padding: 50px 0;
   height: 185px;
+}
+.main.question {
+  position: relative;
+}
+.main.question .num {
+  position: absolute;
+  left: -50px;
 }
 .questions-wrapper {
   margin-top: calc(50vh - 250px);

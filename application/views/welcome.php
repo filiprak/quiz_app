@@ -7,7 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title><?php echo(isset($page_title) ? $page_title : 'Quiz App - Login'); ?></title>
+    <title><?php echo(isset($page_title) ? $page_title : 'Quiz App'); ?></title>
     <link rel="shortcut icon" type="image/png" href="<?php echo base_url() . 'assets/favicon.png'; ?>"/>
     <link rel="shortcut icon" type="image/png" href="<?php echo base_url() . 'assets/favicon.png'; ?>"/>
 
@@ -31,7 +31,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <div class="ui text container">
     <h1 style="font-size: 80px">Welcome</h1>
 
-    <form id="register" action="index.php" method="POST">
+    <form id="register" action="" method="POST">
+        <?php if (!empty($message)) { ?>
+            <div class="ui message error">
+                <?php echo $message; ?>
+            </div>
+        <?php } ?>
         <div class="fancy-form">
             <div class="questions-wrapper">
                 <div id="q1" class="question prompted">
@@ -81,7 +86,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="input-with-prompt">
                         <div class="ui big labels radio">
                             <input type="hidden" name="dob" value="">
-                            <a class="ui basic label togglable" data-value="< 18">< 18</a>
+                            <a class="ui basic label togglable" data-value="under 18">< 18</a>
                             <a class="ui basic label togglable" data-value="18-29">18 - 29</a>
                             <a class="ui basic label togglable" data-value="30-44">30 - 44</a>
                             <a class="ui basic label togglable" data-value="45-64">45 - 64</a>
