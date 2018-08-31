@@ -91,6 +91,23 @@ body, div, h1, h2, h3, h4, h5, p, input, button, span {
   margin-top: calc(50vh - 250px);
 }
 
+.suggestions .card {
+  border: 1px solid var(--primary-color) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background-color: var(--primary-color-extra-light) !important;
+}
+
+.ui.floating.label {
+  top: calc(100% - 1em)
+}
+.ui.floating.label.like {
+  left: calc(100% - 2.5em)
+}
+.ui.floating.label i {
+  margin: 0 !important;
+}
+
 
 /*placeholder colors*/
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */

@@ -23,9 +23,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     <link href="https://fonts.googleapis.com/css?family=Karla:400,400i,700" rel="stylesheet">
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/ScrollMagic.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/plugins/debug.addIndicators.min.js"></script>
-
 </head>
 <body>
 
@@ -67,11 +64,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         //controller.scrollTo($('#q' + nr).offset().top - $('#q1').offset().top);
     }
 
-    function registerTogglable(selector) {
+    function registerTogglable(selector, onclick) {
         $(selector + ' .labels.radio .ui.label.togglable').state().click(function (e) {
             $(this).parent().find('.ui.label.togglable').state('deactivate');
             $(this).state('activate');
             $(this).parent().find('input[type=hidden]').val($(this).attr('data-value'));
+            if ($.isFunction(onclick)) onclick(e, $(this).attr('data-value'));
         });
 
         $(selector + ' .labels.multi-5 .ui.label.togglable').state().click(function (e) {
@@ -110,32 +108,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         });
     }
 
-    registerTogglable('body');
+    registerTogglable('#q1', function (e, val) {
+        setTimeout(function () {
+            postAnswer(1, val);
+        }, 200);
+    });
     bindInputPrompt('#q1', 'drop', 100, function (q1, value) {
         return (value) ? '<div class="ui orange small button" onclick="postAnswer(1, ' + value + ')"><i class="checkmark icon"></i>OK</div>' : false;
     });
-
-
-    // init controller
-    /*var controller = new ScrollMagic.Controller({globalSceneOptions: {duration: 185}});
-
-    // build scenes
-    new ScrollMagic.Scene({triggerElement: "#q1"})
-        .setClassToggle("#q1", "active") // add class toggle
-        //.addIndicators() // add indicators (requires plugin)
-        .addTo(controller);
-    new ScrollMagic.Scene({triggerElement: "#q2"})
-        .setClassToggle("#q2", "active") // add class toggle
-        //.addIndicators() // add indicators (requires plugin)
-        .addTo(controller);
-    new ScrollMagic.Scene({triggerElement: "#q3"})
-        .setClassToggle("#q3", "active") // add class toggle
-        //.addIndicators() // add indicators (requires plugin)
-        .addTo(controller);
-    new ScrollMagic.Scene({triggerElement: "#q4"})
-        .setClassToggle("#q4", "active") // add class toggle
-        //.addIndicators() // add indicators (requires plugin)
-        .addTo(controller);*/
 
     function postAnswer(quest_nr, answer_id) {
         let next_q_nr = quest_nr + 1;
@@ -176,7 +156,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         bindInputPrompt('#q' + next_q_nr, 'drop', 100, function (q, value) {
                             return (value) ? '<div class="ui orange small button" onclick="postAnswer(' + next_q_nr + ', ' + value + ')"><i class="checkmark icon"></i>OK</div>' : false;
                         });
-                        registerTogglable('#q' + next_q_nr);
+                        registerTogglable('#q' + next_q_nr, function (e, val) {
+                            setTimeout(function () {
+                                postAnswer(next_q_nr, val);
+                            }, 200);
+                        });
                     } else if (next_q_nr >= 6) {
 
                         let tagshtml = '';
@@ -187,25 +171,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             }
                         }
 
-                        let elem = $('<div class="questions-wrapper">'+
+                        let elem = $('<form action="<?php echo base_url() . 'index.php/welcome/post_tags' ?>" method="POST"><div class="questions-wrapper">'+
                             '<div id="q' + next_q_nr + '" class="main question prompted active">'+
                             '<h3 class="num">' + next_q_nr + '<i class="arrow right icon"></i></h3>' +
                             '<h2>Please select 5 tags from list below: </h2>'+
                             '<div class="input-with-prompt">'+
                             '<div class="ui big labels multi-5">'+
-                            '<input type="hidden" name="question' + next_q_nr + '" value="">'+
+                            '<input type="hidden" name="tags" value="">'+
                             tagshtml +
                             '</div>'+
                             '<div style="display: block" class="input-prompt">' +
                             '</div>'+
                             '</div>'+
                             '</div>' +
-                            '</div>').appendTo('.fancy-form');
+                            '</div></form>').appendTo('.fancy-form');
                         registerTogglable('#q' + next_q_nr);
 
                         bindInputPrompt('#q' + next_q_nr, 'drop', 100, function (q, value) {
                             let splt = String(value).split(',');
-                            return (splt.length == 5) ? '<div class="ui orange small button" onclick=""><i class="checkmark icon"></i>OK, finish</div>' : false;
+                            return (splt.length == 5) ? '<button type="submit" class="ui orange small button" onclick=""><i class="checkmark icon"></i>OK, finish</button>' : false;
                         });
                     }
 

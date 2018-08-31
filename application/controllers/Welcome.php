@@ -13,6 +13,7 @@ class Welcome extends CI_Controller {
         $this->load->model('questions_model');
         $this->load->model('answers_model');
         $this->load->model('tags_model');
+        $this->load->model('suggestions_model');
         $this->load->library('form_validation');
 
         $this->DOB_OPTIONS = array('under 18', '18-29', '30-44', '45-64', '65+');
@@ -152,7 +153,87 @@ class Welcome extends CI_Controller {
                 'status' => isset($status) ? $status : false,
                 'message' => isset($message) ? $message : 'Finished with status: ' . ($status ? 'OK' : 'FAILED'),
                 'data' => isset($data) ? $data : null,
-                'debug' => $debug
+            )));
+    }
+
+    public function post_tags() {
+
+        $userdata = $this->session->get_userdata();
+        $user_score = is_numeric($userdata['id']) ? $this->scores_model->get($userdata['id']) : null;
+
+        if (!is_array($user_score) || !is_numeric($user_score['question5_answer_id'])) {
+            $this->session->sess_destroy();
+            redirect("welcome/index", 'refresh');
+        }
+
+        $tags = $this->input->post('tags');
+        $tags = explode(',', is_string($tags) ? $tags : "");
+
+        if (count($tags) == 5) {
+            $update_data = array(
+                'total_score_A' => $user_score['total_score_A'],
+                'total_score_I' => $user_score['total_score_I'],
+                'total_score_C' => $user_score['total_score_C'],
+                'total_score_P' => $user_score['total_score_P'],
+            );
+
+            foreach ($tags as $key => $tag_id) {
+                $update_data['tag' . ($key + 1) . '_id'] = $tag_id;
+                $tag = $this->tags_model->get($tag_id);
+                if (is_array($tag)) {
+                    $update_data['total_score_A'] = $user_score['total_score_A'] + $tag['score_A'];
+                    $update_data['total_score_I'] = $user_score['total_score_I'] + $tag['score_I'];
+                    $update_data['total_score_C'] = $user_score['total_score_C'] + $tag['score_C'];
+                    $update_data['total_score_P'] = $user_score['total_score_P'] + $tag['score_P'];
+                }
+            }
+            $this->scores_model->update($userdata['id'], $update_data);
+
+            $final_score = array(
+                'score_A' => $update_data['total_score_A'] ,
+                'score_I' => $update_data['total_score_I'] ,
+                'score_C' => $update_data['total_score_C'] ,
+                'score_P' => $update_data['total_score_P'] ,
+            );
+
+            // load suggestions to show
+            $matched = $this->suggestions_model->get_matched_score($final_score);
+            $this->data['suggestions'] = $matched;
+
+        } else {
+            $this->data['message'] = 'Something went wrong... please try later';
+        }
+
+        $this->load->view('show_suggestions', $this->data);
+    }
+
+    //@JSON api
+    public function rate_suggestion($suggestion_id) {
+        $rating = $this->input->get('rating');
+
+        $userdata = $this->session->get_userdata();
+
+        if (!is_numeric($userdata['id'])) {
+            $this->session->sess_destroy();
+            $status = false;
+            $message = 'Session expired';
+
+        } else if (is_numeric($suggestion_id) && is_numeric($rating) && in_array($rating, array(0,1))) {
+
+            $status = $this->suggestions_model->rate($suggestion_id, $userdata['id'], $rating);
+
+        } else {
+            $status = false;
+            $message = 'Invalid parameters';
+        }
+
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_status_header(200)
+            ->set_output(json_encode(array(
+                'status' => isset($status) ? $status : false,
+                'message' => isset($message) ? $message : 'Finished with status: ' . ($status ? 'OK' : 'FAILED'),
+                'data' => isset($data) ? $data : null,
             )));
     }
 
