@@ -111,10 +111,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     registerTogglable('#q1', function (e, val) {
         setTimeout(function () {
             postAnswer(1, val);
-        }, 200);
+        }, 500);
     });
     bindInputPrompt('#q1', 'drop', 100, function (q1, value) {
-        return (value) ? '<div class="ui orange small button" onclick="postAnswer(1, ' + value + ')"><i class="checkmark icon"></i>OK</div>' : false;
+        return (value) ? '<div class="ui orange small label label-spinner"><i class="loading spinner icon"></i>Loading...</div>' : false;
     });
 
     function postAnswer(quest_nr, answer_id) {
@@ -127,7 +127,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                 if (res.status) {
                     // lock current question
-                    $('#q' + quest_nr).removeClass('active').find('.button').remove();
+                    $('#q' + quest_nr).removeClass('active').find('.label-spinner').remove();
                     $('#q' + quest_nr + ' .label.togglable').off('click');
 
                     if (next_q_nr < 6) {
@@ -154,12 +154,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             '</div>' +
                             '</div>').appendTo('.fancy-form');
                         bindInputPrompt('#q' + next_q_nr, 'drop', 100, function (q, value) {
-                            return (value) ? '<div class="ui orange small button" onclick="postAnswer(' + next_q_nr + ', ' + value + ')"><i class="checkmark icon"></i>OK</div>' : false;
+                            return (value) ? '<div class="ui orange small label label-spinner"><i class="loading spinner icon"></i>Loading...</div>' : false;
                         });
                         registerTogglable('#q' + next_q_nr, function (e, val) {
                             setTimeout(function () {
                                 postAnswer(next_q_nr, val);
-                            }, 200);
+                            }, 500);
                         });
                     } else if (next_q_nr >= 6) {
 
