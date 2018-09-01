@@ -74,7 +74,7 @@ class Welcome extends CI_Controller {
         if (is_array($question1)) {
             $with_answers = $this->questions_model->get_with_answers($question1['id']);
         }
-        pp($question1);
+        
         $this->data['question1'] = $question1;
         $this->data['question1_answers'] = $with_answers['answers'];
 
