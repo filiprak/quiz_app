@@ -62,10 +62,10 @@ class Scores extends Admin_panel
         $quest_indexes = array(1, 2, 3, 4, 5);
         $tag_indexes = array(1, 2, 3, 4, 5);
 
-        $this->form_validation->set_rules('email', 'email', 'trim|required|valid_email|max_length[512]');
+        $this->form_validation->set_rules('email', 'email', 'trim|valid_email|max_length[512]');
         $this->form_validation->set_rules('name', 'name', 'trim|required|max_length[256]');
         $this->form_validation->set_rules('gender', 'gender', 'trim');
-        $this->form_validation->set_rules('dob', 'date of birth', 'trim|required');
+        $this->form_validation->set_rules('dob', 'date of birth', 'trim');
 
         $this->form_validation->set_rules('score_a', 'score A', 'trim|is_natural');
         $this->form_validation->set_rules('score_i', 'score I', 'trim|is_natural');
@@ -224,10 +224,10 @@ class Scores extends Admin_panel
         $quest_indexes = array(1, 2, 3, 4, 5);
         $tag_indexes = array(1, 2, 3, 4, 5);
 
-        $this->form_validation->set_rules('email', 'email', 'trim|required|valid_email|max_length[512]');
+        $this->form_validation->set_rules('email', 'email', 'trim|valid_email|max_length[512]');
         $this->form_validation->set_rules('name', 'name', 'trim|required|max_length[256]');
         $this->form_validation->set_rules('gender', 'gender', 'trim');
-        $this->form_validation->set_rules('dob', 'date of birth', 'trim|required');
+        $this->form_validation->set_rules('dob', 'date of birth', 'trim');
 
         $this->form_validation->set_rules('score_a', 'score A', 'trim|is_natural');
         $this->form_validation->set_rules('score_i', 'score I', 'trim|is_natural');

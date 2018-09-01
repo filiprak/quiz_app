@@ -16,7 +16,7 @@
         <?php echo form_input($name); ?>
     </div>
 
-    <div class="required field">
+    <div class="field">
         <label>E-mail</label>
         <?php echo form_input($email); ?>
     </div>
@@ -29,7 +29,7 @@
         </select>
     </div>
 
-    <div class="required field">
+    <div class="field">
         <label>Date of Birth</label>
         <select name="dob" class="ui dropdown gender-chooser">
             <?php foreach ($dob_options as $opt) { ?>
