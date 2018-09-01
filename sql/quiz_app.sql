@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Czas generowania: 31 Sie 2018, 23:58
+-- Czas generowania: 01 Wrz 2018, 20:17
 -- Wersja serwera: 5.7.22-0ubuntu0.16.04.1
 -- Wersja PHP: 5.6.37-1+ubuntu16.04.1+deb.sury.org+1
 
@@ -245,9 +245,9 @@ INSERT INTO `qa_ratings` (`id`, `suggestion_id`, `score_id`, `rating`) VALUES
 CREATE TABLE `qa_scores` (
   `id` int(11) NOT NULL,
   `name` varchar(256) COLLATE utf8_unicode_ci NOT NULL,
-  `dob` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `dob` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
   `gender` varchar(24) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `email` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(512) COLLATE utf8_unicode_ci DEFAULT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Time and Date',
   `question1_id` int(11) DEFAULT NULL COMMENT 'ID of the question shown',
   `question1_answer_id` int(11) DEFAULT NULL COMMENT 'ID of answer that was chosen',
@@ -276,17 +276,12 @@ CREATE TABLE `qa_scores` (
 
 INSERT INTO `qa_scores` (`id`, `name`, `dob`, `gender`, `email`, `timestamp`, `question1_id`, `question1_answer_id`, `question2_id`, `question2_answer_id`, `question3_id`, `question3_answer_id`, `question4_id`, `question4_answer_id`, `question5_id`, `question5_answer_id`, `tag1_id`, `tag2_id`, `tag3_id`, `tag4_id`, `tag5_id`, `total_score_A`, `total_score_I`, `total_score_C`, `total_score_P`) VALUES
 (1, 'Test User', '2017-12-11', 'male', 'test@user.com', '2018-08-27 17:54:52', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 200, 175, 140, 60),
-(2, 'Test User', '2018-08-14', 'female', 'asdsad@i.ll', '2018-08-27 19:47:04', 1, 31, 1, 31, 1, 31, 1, 31, 1, 31, 3, 3, 3, 3, 3, 0, 0, 0, 0),
-(4, 'John', '45-64', 'female', 'test@t.t', '2018-08-27 21:14:41', 9, NULL, 17, NULL, 11, NULL, 4, NULL, 2, NULL, 3, 4, 3, 3, 3, 400, 200, 90, 100),
-(5, 'asdsad', '18-29', '', 'sdsad@ww.pww', '2018-08-29 22:25:24', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0),
-(6, 'Filip', '45-64', NULL, 'fr@wp.pl', '2018-08-29 22:33:44', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0),
-(7, 'Adam', '65+', 'male', 'a@a.pl', '2018-08-29 22:38:50', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0),
-(8, 'f', 'under 18', NULL, 'f@wp.pl', '2018-08-29 22:59:29', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0),
 (9, 'Tst', 'under 18', 'male', 'test@t.sp', '2018-08-30 06:53:19', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0),
 (10, 'sddsd', 'under 18', 'male', 'email@w.sd', '2018-08-30 06:55:06', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0),
-(11, 'Andrew', '30-44', NULL, 'andr@wp.pl', '2018-08-30 18:51:18', 16, 89, 15, 84, 14, 82, 41, 107, 9, 65, NULL, NULL, NULL, NULL, NULL, 2510, 6190, 3800, 2880),
 (12, 'asd', '30-44', 'male', 'cxzx@d.ss', '2018-08-31 18:21:28', 6, 52, 38, 101, 7, 58, 4, 43, 23, 1, 25, 20, 31, 32, 34, 3910, 415, 5970, 420),
-(13, 'T', '65+', 'male', 't@f.dd', '2018-08-31 20:59:06', 4, 43, 41, 110, 23, 2, 8, 61, 12, 74, 30, 38, 14, 31, 9, 610, 125, 800, 170);
+(13, 'T', '65+', 'male', 't@f.dd', '2018-08-31 20:59:06', 4, 43, 41, 110, 23, 2, 8, 61, 12, 74, 30, 38, 14, 31, 9, 610, 125, 800, 170),
+(14, 'Jack', '18-29', 'male', 'jck@t.ok', '2018-08-31 22:10:30', 2, 34, 14, 80, 38, 101, 19, 97, 23, NULL, NULL, NULL, NULL, NULL, NULL, 230, 305, 30, 360),
+(15, 'Filip', '', NULL, '', '2018-09-01 18:16:49', 11, 68, 13, 76, 14, 79, 9, 65, 12, 73, 14, 15, 16, 9, 23, 220, 100, 50, 20);
 
 -- --------------------------------------------------------
 
@@ -409,7 +404,7 @@ CREATE TABLE `qa_users` (
 --
 
 INSERT INTO `qa_users` (`id`, `ip_address`, `username`, `password`, `salt`, `email`, `activation_code`, `forgotten_password_code`, `forgotten_password_time`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`) VALUES
-(1, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', 'admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1535743480, 1, 'Admin', 'Istrator', 'ADMIN', '0'),
+(1, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', 'admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1535825403, 1, 'Admin', 'Istrator', 'ADMIN', '0'),
 (2, '::1', 'test@test.com', '$2y$08$IrlbOvTg5A7inOIskAKqK.HpqlgDBVqs/Gs6dTG1Xn0M4tos3SY1.', NULL, 'test@test.com', NULL, NULL, NULL, NULL, 1535143031, NULL, 1, 'Test', 'Test', '', '2325345436'),
 (3, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', '1admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1268889823, 1, 'Admin', 'istrator', 'ADMIN', '0'),
 (5, '127.0.0.1', 'administrator', '$2a$07$SeBknntpZror9uyftVopmu61qg0ms8Qv1yV6FG.kQOSM.9QhmTo36', '', '3admin@admin.com', '', NULL, NULL, NULL, 1268889823, 1268889823, 1, 'Admin', 'istrator', 'ADMIN', '0'),
@@ -554,12 +549,12 @@ ALTER TABLE `qa_questions`
 -- AUTO_INCREMENT dla tabeli `qa_ratings`
 --
 ALTER TABLE `qa_ratings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 --
 -- AUTO_INCREMENT dla tabeli `qa_scores`
 --
 ALTER TABLE `qa_scores`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 --
 -- AUTO_INCREMENT dla tabeli `qa_suggestions`
 --

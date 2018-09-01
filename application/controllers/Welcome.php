@@ -42,12 +42,12 @@ class Welcome extends CI_Controller {
             );
 
             $this->form_validation->set_rules('name', 'name', 'trim|required|max_length[256]');
-            $this->form_validation->set_rules('email', 'email', 'trim|required|valid_email|max_length[512]');
+            $this->form_validation->set_rules('email', 'email', 'trim|valid_email|max_length[512]');
             $this->form_validation->set_rules('gender', 'gender', 'trim|max_length[24]');
-            $this->form_validation->set_rules('dob', 'age', 'trim|required|max_length[64]');
+            $this->form_validation->set_rules('dob', 'age', 'trim|max_length[64]');
 
             if ($this->form_validation->run() === TRUE
-            && in_array($dob, $this->DOB_OPTIONS) && (in_array($gender, $this->GENDER_OPTIONS) || !$gender)
+            && (in_array($dob, $this->DOB_OPTIONS) || !$dob) && (in_array($gender, $this->GENDER_OPTIONS) || !$gender)
             && $score_id = $this->scores_model->create($score_data)) {
 
                 $score_data['id'] = $score_id;
@@ -70,10 +70,11 @@ class Welcome extends CI_Controller {
             redirect("welcome/index", 'refresh');
         }
 
-        $question1 = $this->questions_model->random_question();
+        $question1 = $this->questions_model->random_question('group1');
         if (is_array($question1)) {
             $with_answers = $this->questions_model->get_with_answers($question1['id']);
         }
+        pp($question1);
         $this->data['question1'] = $question1;
         $this->data['question1_answers'] = $with_answers['answers'];
 
@@ -161,7 +162,7 @@ class Welcome extends CI_Controller {
         $userdata = $this->session->get_userdata();
         $user_score = is_numeric($userdata['id']) ? $this->scores_model->get($userdata['id']) : null;
 
-        if (!is_array($user_score) || !is_numeric($user_score['question5_answer_id'])) {
+        if (!is_array($user_score) || !is_numeric($user_score['question5_answer_id']) || is_numeric($user_score['tag1_id'])) {
             $this->session->sess_destroy();
             redirect("welcome/index", 'refresh');
         }

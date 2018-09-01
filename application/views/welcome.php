@@ -54,7 +54,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
                 <div id="q2" class="question">
-                    <h2>What's your <b>email address</b> ? *</h2>
+                    <h2>What's your <b>email address</b> ? </h2>
                     <div class="input-with-prompt">
                         <div class="ui massive transparent input border-bottom">
                             <input id="email" name="email" class="red" type="text" placeholder="Type your email here..."
@@ -67,7 +67,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </div>
 
                 <div id="q3" class="question">
-                    <h2>Please select your <b>gender</b> (optional)</h2>
+                    <h2>Please select your <b>gender</b></h2>
                     <div class="input-with-prompt">
                         <div class="ui big labels radio">
                             <input type="hidden" name="gender" value="">
@@ -75,14 +75,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <a class="ui basic label togglable" data-value="female"><i
                                         class="icon female"></i>Female</a>
                         </div>
-                        <div style="display: block" class="input-prompt">
-                            <div class="ui orange small button" onclick="scrollToQuestion(4)">SKIP<i
-                                        class="chevron right icon"></i></div>
-                        </div>
+<!--                        <div style="display: block" class="input-prompt">-->
+<!--                            <div class="ui orange small button" onclick="scrollToQuestion(4)">SKIP<i-->
+<!--                                        class="chevron right icon"></i></div>-->
+<!--                        </div>-->
                     </div>
                 </div>
 
-                <div id="q4" class="question"><h2>Please select your <b>age</b> *</h2>
+                <div id="q4" class="question"><h2>Please select your <b>age</b></h2>
                     <div class="input-with-prompt">
                         <div class="ui big labels radio">
                             <input type="hidden" name="dob" value="">
@@ -138,21 +138,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             $('#q1 input').focus();
             e.preventDefault();
         }
-        else if (!validateEmail(email)) {
+        else if (email && !validateEmail(email)) {
             $('#q2 .input-prompt').html('<div class="ui red tiny pointing label" onclick="scrollToQuestion(3)">' +
                 'Invalid email</div>').transition('show');
             scrollToQuestion(2);
             $('#q2 input').focus();
             e.preventDefault();
         }
-        else if (!dob) {
-            $('#q4 .input-prompt').html('<div class="ui red tiny pointing label" onclick="scrollToQuestion(3)">' +
-                'Required field</div>').transition('show');
-            scrollToQuestion(4);
-            e.preventDefault();
-        }
-
-        console.log([name, email, gender, dob])
 
     });
 

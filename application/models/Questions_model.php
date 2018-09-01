@@ -182,8 +182,10 @@ class Questions_model extends CI_Model
     public function random_question($group = null, $excluded_ids = array()) {
         $this->db->select('*')
             ->from('questions');
-        if ($group !== null) {
+        if (is_string($group)) {
             $this->db->where('group_id', $group);
+        } else if(is_array($group)) {
+            $this->db->where_in('group_id', $group);
         }
         if (count($excluded_ids) > 0) {
             $this->db->where_not_in('id', $excluded_ids);
