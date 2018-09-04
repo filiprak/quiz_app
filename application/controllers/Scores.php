@@ -23,7 +23,7 @@ class Scores extends Admin_panel
         $search_score = $this->input->get('search_score', TRUE);
 
         $page = is_numeric($page) ? (int)$page : 1;
-        $perpage = 10;
+        $perpage = 50;
 
         $search_params = is_string($search_score) && strlen($search_score) > 0 ? array(
             'description' => $search_score,

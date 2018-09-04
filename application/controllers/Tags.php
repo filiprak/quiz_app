@@ -19,7 +19,7 @@ class Tags extends Admin_panel
         $search_tag = $this->input->get('search_tag', TRUE);
 
         $page = is_numeric($page) ? (int)$page : 1;
-        $perpage = 10;
+        $perpage = 100;
 
         $search_params = is_string($search_tag) && strlen($search_tag) > 0 ? array(
             'description' => $search_tag,

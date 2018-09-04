@@ -20,7 +20,7 @@ class Questions extends Admin_panel
         $search_question = $this->input->get('search_question', TRUE);
 
         $page = is_numeric($page) ? (int)$page : 1;
-        $perpage = 10;
+        $perpage = 100;
 
         $search_params = is_string($search_question) && strlen($search_question) > 0 ? array(
             'question' => $search_question,
