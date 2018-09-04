@@ -179,25 +179,29 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     });
 
 
+    var duration = 185;
+    if ($(window).width() <= 1024)
+        duration = Math.ceil($(window).height() * 0.8);
+
     // init controller
-    var controller = new ScrollMagic.Controller({globalSceneOptions: {duration: 185}});
+    var controller = new ScrollMagic.Controller({globalSceneOptions: {duration: duration}});
 
     // build scenes
     new ScrollMagic.Scene({triggerElement: "#q1"})
         .setClassToggle("#q1", "active") // add class toggle
-        //.addIndicators() // add indicators (requires plugin)
+        .addIndicators() // add indicators (requires plugin)
         .addTo(controller);
     new ScrollMagic.Scene({triggerElement: "#q2"})
         .setClassToggle("#q2", "active") // add class toggle
-        //.addIndicators() // add indicators (requires plugin)
+        .addIndicators() // add indicators (requires plugin)
         .addTo(controller);
     new ScrollMagic.Scene({triggerElement: "#q3"})
         .setClassToggle("#q3", "active") // add class toggle
-        //.addIndicators() // add indicators (requires plugin)
+        .addIndicators() // add indicators (requires plugin)
         .addTo(controller);
     new ScrollMagic.Scene({triggerElement: "#q4"})
         .setClassToggle("#q4", "active") // add class toggle
-        //.addIndicators() // add indicators (requires plugin)
+        .addIndicators() // add indicators (requires plugin)
         .addTo(controller);
 
 
