@@ -186,8 +186,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
     var duration = 185;
-    if (window.mobilecheck())
+    if (window.mobilecheck()) {
         duration = Math.ceil($(window).height() * 0.8);
+        $('.question:not(.main)').addClass('mobile');
+    }
 
     // init controller
     var controller = new ScrollMagic.Controller({globalSceneOptions: {duration: duration}});
