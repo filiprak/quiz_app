@@ -200,6 +200,7 @@ class Welcome extends CI_Controller {
             // load suggestions to show
             $matched = $this->suggestions_model->get_matched_score($final_score);
             $this->data['suggestions'] = $matched;
+            $this->data['final_score'] = $final_score;
 
         } else {
             $this->data['message'] = 'Something went wrong... please try later';

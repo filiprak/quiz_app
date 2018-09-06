@@ -37,6 +37,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     <?php //pp($suggestions); ?>
 
+    <div class="ui grid stackable large labels final-scores">
+        <div class="four wide column">
+            <div class="ui label orange fluid">Score A: <div class="detail"><?php echo $final_score['score_A'] ?></div>
+            </div>
+        </div>
+        <div class="four wide column">
+            <div class="ui label orange fluid">Score I: <div class="detail"><?php echo $final_score['score_I'] ?></div>
+            </div>
+        </div>
+        <div class="four wide column">
+            <div class="ui label orange fluid">Score C: <div class="detail"><?php echo $final_score['score_C'] ?></div>
+            </div>
+        </div>
+        <div class="four wide column">
+            <div class="ui label orange fluid">Score P: <div class="detail"><?php echo $final_score['score_P'] ?></div>
+            </div>
+        </div>
+    </div>
+
     <div style="margin-top: 50px" class="suggestions">
         <div class="ui three doubling stackable cards">
             <?php foreach ($suggestions as $suggestion) {?>
